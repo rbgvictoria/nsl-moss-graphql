@@ -57,11 +57,11 @@ namespace App\Models;
  * @property NameRank $nameRank
  * @property Name $family
  * @property Comment[] $comments
- * @property Instance[] $instances
+ * @property TaxonomicNameUsages[] $$taxonomicNameUsages
  * @property Tag[] $tags
- * @property Name[] $children
+ * @property TaxonomicName[] $children
  */
-class Name extends BaseModel
+class TaxonomicName extends BaseModel
 {
     /**
      * The table associated with the model.
@@ -87,7 +87,7 @@ class Name extends BaseModel
      */
     public function duplicate_of()
     {
-        return $this->belongsTo('App\Models\Name', 'duplicate_of_id');
+        return $this->belongsTo('App\Models\TaxonomicName', 'duplicate_of_id');
     }
 
     /**
@@ -103,7 +103,7 @@ class Name extends BaseModel
      */
     public function second_parent()
     {
-        return $this->belongsTo('App\Models\Name', 'second_parent_id');
+        return $this->belongsTo('App\Models\TaxonomicName', 'second_parent_id');
     }
 
     /**
@@ -143,7 +143,7 @@ class Name extends BaseModel
      */
     public function parent()
     {
-        return $this->belongsTo('App\Models\Name', 'parent_id');
+        return $this->belongsTo('App\Models\TaxonomicName', 'parent_id');
     }
     
     /**
@@ -152,7 +152,7 @@ class Name extends BaseModel
      */
     public function children()
     {
-        return $this->hasMany('\App\Models\Name', 'parent_id', 'id')->orderBy('full_name');
+        return $this->hasMany('\App\Models\TaxonomicName', 'parent_id', 'id')->orderBy('full_name');
     }
 
     /**
@@ -184,7 +184,7 @@ class Name extends BaseModel
      */
     public function family()
     {
-        return $this->belongsTo('App\Models\Name', 'family_id');
+        return $this->belongsTo('App\Models\TaxonomicName', 'family_id');
     }
 
     /**
@@ -196,11 +196,14 @@ class Name extends BaseModel
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Gets all taxonomicNameUsages for a TaxonomicName string
+     * (replaces hasMany relationship, which I couldn't get to work)
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function instances()
+    public function getTaxonomicNameUsagesAttribute()
     {
-        return $this->hasMany('App\Models\Instance');
+        return \App\Models\TaxonomicNameUsage::where('name_id', '=', $this->id)->get();
     }
 
     /**
@@ -216,19 +219,117 @@ class Name extends BaseModel
      * 
      * @return \App\Model\Instance
      */
-    public function getPrimaryInstanceAttribute() {
+    public function getPrimaryInstanceAttribute() 
+    {
         return $this->hasMany('\App\Models\Instance', 'name_id', 'id')
                 ->where('isPrimaryInstance', '=', true)->first();
     }
 
     /**
-     * Undocumented function
+     *
+     * @return string
+     */
+    public function getGenericNameAttribute()
+    {
+        if ($this->nameRank->sortOrder > 120
+                && $this->nameRank->sortOrder < 500) {
+            return substr($this->simple_name, 0, strpos($this->simple_name, ' '));
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getInfragenericNameAttribute()
+    {
+        if ($this->nameRank->sortOrder > 120 && $this->nameRank->sortOrder < 180) {
+            return $this->parent->name_element;
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getSpecificEpithetAttribute()
+    {
+        if ($this->nameRank->sortOrder > 190 && $this->nameRank->sortOrder < 500) {
+            return $this->parent->name_element;
+        }
+        elseif ($this->nameRank->sortOrder === 190) {
+            return $this->name_element;
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getInfraspecificEpithetAttribute()
+    {
+        if ($this->nameRank->sortOrder > 190 && $this->nameRank->sortOrder < 500) {
+            return $this->name_element;
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getCultivarEpithetAttribute()
+    {
+        if ($this->nameType->cultivar === true) {
+            return $this->name_element;
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getAuthorshipAttribute() 
+    {
+        $authorship = '';
+        if ($this->basAuthor) {
+            $authorship .= '(';
+            if ($this->exBasAuthor) {
+                $authorship .= $this->exBasAuthor->abbrev . ' ex ';
+            }
+            $authorship .= $this->basAuthor->abbrev . ') ';
+        }
+        if ($this->exAuthor) {
+            $authorship .= $this->exAuthor->abbrev . ' ex ';
+        }
+        $authorship .= $this->author->abbrev;
+        return $authorship;
+    }
+
+    /**
+     * Gets the nomenclatural code from the name_group table
+     *
+     * @return string
+     */
+    public function getNomenclaturalCodeAttribute()
+    {
+        return $this->name_type->name_group->name;
+    }
+
+
+    /**
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param mixed $args
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeOrderByFullName($query) {
+    public function scopeOrderByFullName($query) 
+    {
         return $query->orderBy('full_name', 'asc');
     }
+
 }

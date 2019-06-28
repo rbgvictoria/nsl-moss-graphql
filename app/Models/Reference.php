@@ -138,4 +138,8 @@ class Reference extends BaseModel
     {
         return $this->hasMany('App\Models\Instance')->where('isStandalone', true);
     }
+
+    public function getShortRefAttribute() {
+        return $this->author->name . ' ' . $this->year;
+    }
 }

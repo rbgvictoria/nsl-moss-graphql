@@ -1,0 +1,7 @@
+type NameCategory {
+    id: ID!
+    maxParentsAllowed: Int!
+    minParentsRequired: Int!
+    name: String!
+    sortOrder: Int!
+}

@@ -1,0 +1,21 @@
+type InstanceType {
+    id: ID!
+    citing: Boolean
+    doubtful: Boolean
+    hasLabel: String
+    misapplied: Boolean
+    name: String!
+    nomenclatural: Boolean
+    ofLabel: String
+    primaryInstance: Boolean
+    proParte: Boolean
+    protologue: Boolean
+    relationship: Boolean
+    secondaryInstance: Boolean
+    sortOrder: Int
+    standalone: Boolean
+    synonym: Boolean
+    taxonomic: Boolean
+    unsourced: Boolean
+    bidirectional: Boolean
+}

@@ -1,0 +1,8 @@
+type NameStatus {
+    id: ID!
+    name: String!
+    display: Boolean
+    nomIlleg: Boolean
+    nomInval: Boolean
+    nameGroup: NameGroup
+}

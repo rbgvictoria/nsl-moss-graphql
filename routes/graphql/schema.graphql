@@ -1,223 +1,27 @@
-"A datetime string with format 'Y-m-d H:i:s', e.g. '2018-01-01 13:00:00'."
-scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
-
-"A date string with format 'Y-m-d', e.g. '2011-05-23'."
-scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+#import ../../app/Http/GraphQL/Types/Author.graphql
+#import ../../app/Http/GraphQL/Types/TaxonomicNameUsage.graphql
+#import ../../app/Http/GraphQL/Types/InstanceType.graphql
+#import ../../app/Http/GraphQL/Types/TaxonomicName.graphql
+#import ../../app/Http/GraphQL/Types/NameCategory.graphql
+#import ../../app/Http/GraphQL/Types/NameGroup.graphql
+#import ../../app/Http/GraphQL/Types/NameRank.graphql
+#import ../../app/Http/GraphQL/Types/NameStatus.graphql
+#import ../../app/Http/GraphQL/Types/NameType.graphql
+#import ../../app/Http/GraphQL/Types/RefAuthorRole.graphql
+#import ../../app/Http/GraphQL/Types/RefType.graphql
+#import ../../app/Http/GraphQL/Types/Reference.graphql
+#import ../../app/Http/GraphQL/Types/Scalars.graphql
 
 type Query {
     authors: [Author!]! @paginate(type: "paginator")
     author(id: ID @eq): Author @find
 
-    instances: [Instance!]! @paginate(type: "paginator")
-    instance(id: ID @eq): Instance @find
+    taxonomicNameUsages: [TaxonomicNameUsage!]! @paginate(type: "paginator")
+    taxonomicNameUsage(id: ID @eq): TaxonomicNameUsage @find
 
-    names: [Name!]! @paginate(type: "paginator")
-    name(id: ID @eq): Name @find
+    taxonomicNames(fullName: String @contains): [TaxonomicName!]! @paginate(type: "paginator", scopes: ["orderByFullName"])
+    taxonomicName(id: ID @eq): TaxonomicName @find
 
     references: [Reference!]! @paginate(type: "paginator")
     reference(id: ID @eq): Reference @find
-
-}
-
-type Author {
-    id: ID!
-    abbrev: String
-    fullName: String
-    ipniId: String
-    name: String!
-}
-
-"""
-Instance of a Name
-"""
-type Instance {
-    id: ID!
-    bhlUrl: String
-    citedBy: Instance
-    cites: Instance
-    draft: Boolean
-    instanceType: InstanceType!
-    name: Name!
-    nomenclaturalStatus: String
-    page: String
-    pageQualifier: String
-    parent: Instance
-    reference: Reference!
-    uri: String
-    verbatimNameString: String
-
-    "Shortcut to the name of the Instance Type"
-    instanceTypeName: String
-    """
-    All relationship instances for an instance. In the NSL data model these are 
-    linked to the instance through their citedBy attribute. Relationship 
-    instances include basionyms, synonyms, misapplications etc.
-    """
-    relationshipInstances: [Instance]
-    """
-    Instance with a 'basionym' or 'replaced synonym' relationship with the present
-    instance. Only primary instances can have a basionym instance. 
-    """
-    basionym: Instance
-    """
-    Instance for which this instance is a synonym.
-    """
-    synonymOf: Instance
-    """
-    Instances with a 'synonym' type relationship with the present instance. This 
-    includes nomenclatural synonyms, taxonomic synonyms etc.
-    """
-    synonyms: [Instance]
-    """
-    Instances with a 'misapplied' type relationship with the present instance. 
-    """
-    misapplications: [Instance]
-    """
-    Instance of name to which this name instance has been misapplied
-    """
-    misappliedTo: Instance
-
-}
-
-type InstanceType {
-    id: ID!
-    citing: Boolean
-    doubtful: Boolean
-    hasLabel: String
-    misapplied: Boolean
-    name: String!
-    nomenclatural: Boolean
-    ofLabel: String
-    primaryInstance: Boolean
-    proParte: Boolean
-    protologue: Boolean
-    relationship: Boolean
-    secondaryInstance: Boolean
-    sortOrder: Int
-    standalone: Boolean
-    synonym: Boolean
-    taxonomic: Boolean
-    unsourced: Boolean
-    bidirectional: Boolean
-}
-
-type Name {
-    id: ID!
-    author: Author
-    basAuthor: Author
-    basExAuthor: Author
-    exAuthor: Author
-    fullName: String!
-    nameElement: String!
-    namePath: String
-    nameRank: NameRank!
-    nameStatus: NameStatus!
-    nameType: NameType!
-    orthVar: Boolean
-    parent: Name
-    """
-    Parent name. This relationship is between names and is helpful to construct 
-    combinations: names of rank genus and higher will not need it and will 
-    generally not have it. 
-    """
-    sortName: String
-    simpleName: String!
-    statusSummary: String
-    verbatimRank: String
-
-    instances: [Instance!]!
-    """
-    Subordinate names: species in a genus, subspecies or varieties for a speciess, 
-    etc. [Will be removed when the trees, which have the full hierarchical 
-    relationships between "taxa" are in the schema.]
-    """
-    children: [Name!]!
-    """
-    Primary or protologue instance of a name. In the NSL this is an instance with 
-    an instance type for which the primaryInstance attribute is true. 
-    """
-    primaryInstance: Instance
-}
-
-type NameCategory {
-    id: ID!
-    maxParentsAllowed: Int!
-    minParentsRequired: Int!
-    name: String!
-    sortOrder: Int!
-}
-
-type NameGroup {
-    id: ID!
-    name: String!
-}
-
-type NameRank {
-    id: ID!
-    name: String!
-    hasParent: Boolean!
-    parentRank: NameRank
-    nameGroup: NameGroup
-}
-
-type NameStatus {
-    id: ID!
-    name: String!
-    display: Boolean
-    nomIlleg: Boolean
-    nomInval: Boolean
-    nameGroup: NameGroup
-}
-
-type NameType {
-    id: ID!
-    name: String!
-    cultivar: Boolean
-    formula: Boolean
-    hybrid: Boolean
-    scientific: Boolean
-    nameGroup: NameGroup
-}
-
-type RefAuthorRole {
-    id: ID!
-    name: String!
-}
-
-type Reference {
-    id: ID!
-    author: Author!
-    citation: String
-    displayTitle: String
-    doi: String
-    edition: String
-    """
-    Instances for a reference. For references only standalone instances are 
-    provided.
-    """
-    instances: [Instance!]! @paginate(type: "paginator")
-    isbn: String
-    issn: String
-    pages: String
-    parent: Reference
-    publicationDate: Date
-    published: Boolean
-    publishedLocation: String
-    publisher: String
-    refAuthorRole: RefAuthorRole!
-    refType: RefType!
-    title: String!
-    tl2: String
-    uri: String
-    verbatimAuthor: String
-    volume: String
-    year: Int
-}
-
-type RefType {
-    id: ID!
-    name: String!
-    parent: RefType
-    parentOptional: Boolean
-    useParentDetails: Boolean
 }

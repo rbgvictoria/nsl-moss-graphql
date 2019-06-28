@@ -1,0 +1,243 @@
+type Author {
+  id: ID!
+  abbrev: String
+  fullName: String
+  ipniId: String
+  name: String!
+}
+
+type AuthorPaginator {
+  paginatorInfo: PaginatorInfo!
+  data: [Author!]!
+}
+
+scalar Date
+
+scalar DateTime
+
+type TaxonomicNameUsage {
+  id: ID!
+  bhlUrl: String
+  citedBy: TaxonomicNameUsage
+  cites: TaxonomicNameUsage
+  instanceType: TaxonomicNameUsageType!
+  name: Name!
+  nomenclaturalStatus: String
+  page: String
+  pageQualifier: String
+  parent: TaxonomicNameUsage
+  reference: Reference!
+  verbatimNameString: String
+
+  basionym: TaxonomicNameUsage
+  replacedSynonym: TaxonomicNameUsage
+  protonym: TaxonomicNameUsage
+  
+  acceptedNameUsage: TaxonomicNameUsage
+  homoTypicSynonyms: [TaxonomicNameUsage]
+  heteroTypicSynonyms: [TaxonomicNameUsage]
+
+  misappliedTo: TaxonomicNameUsage
+  misapplications: [TaxonomicNameUsage]
+
+  notes: [TaxonomicNameUsageNote!]
+}
+
+type TaxonomicNameUsageNotes {
+  id: ID!
+  taxonomicNameUsageNoteType: TaxonomicNameUsageNoteType!
+  value: String!
+}
+
+type TaxonomicNameUsageNoteType {
+  id: ID!
+  name: String!
+}
+
+type InstancePaginator {
+  paginatorInfo: PaginatorInfo!
+  data: [Instance!]!
+}
+
+type TaxonomicNameUsageType {
+  id: ID!
+  isDoubtful: Boolean
+  label: String
+  labelOfInverse: String # ofLabel
+  misapplied: Boolean
+  name: String!
+  isNomenclatural: Boolean
+  isPrimary: Boolean
+  isProParte: Boolean
+  isProtologue: Boolean
+  isRelationship: Boolean
+  isSecondaryInstance: Boolean
+  isStandalone: Boolean
+  isSynonym: Boolean
+  isTaxonomic: Boolean
+  isUnsourced: Boolean
+  isBidirectional: Boolean
+}
+
+type TaxonomicName {
+  id: ID!
+  
+  fullName: String!
+  #fullNameHtml? better as break-down of elements
+  nameElement: String!
+
+  author: Author
+  exAuthor: Author
+  basionymAuthor: Author
+  basionymExAuthor: Author
+
+  "Full authorship"
+  authorship: String
+  
+  nameRank: NameRank!
+  nameStatus: NameStatus!
+  nameType: NameType!
+  isOrthVar: Boolean ?
+  publishedYear: Int
+
+  parent: Name 
+  secondParent: Name
+  simpleName: String!
+  statusSummary: String ??
+  verbatimRank: String
+
+  nomenclaturalCode: NomenclaturalCode!
+
+  taxonomicNameUsages: [TaxonomicNameUsage!]!
+  primaryTaxonomicNameUsage: Instance
+}
+
+type NameCategory {
+  id: ID!
+  maxParentsAllowed: Int!
+  minParentsRequired: Int!
+  name: String!
+  sortOrder: Int!
+}
+
+type NameGroup {
+  id: ID!
+  name: String!
+}
+
+type NamePaginator {
+  paginatorInfo: PaginatorInfo!
+  data: [Name!]!
+}
+
+type NameRank {
+  id: ID!
+  name: String!
+  parentRank: NameRank
+  isMajorRank: Boolean
+  sortOrder: Int
+  isVisibleInName: Boolean
+}
+
+type NameStatus {
+  id: ID!
+  name: String!
+  nomIlleg: Boolean
+  nomInval: Boolean
+}
+
+type NameType {
+  id: ID!
+  name: String!
+  isCultivar: Boolean
+  isFormula: Boolean
+  isHybrid: Boolean
+  scientific: Boolean
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+  total: Int
+  count: Int
+  currentPage: Int
+  lastPage: Int
+}
+
+type PaginatorInfo {
+  count: Int!
+  currentPage: Int!
+  firstItem: Int
+  hasMorePages: Boolean!
+  lastItem: Int
+  lastPage: Int!
+  perPage: Int!
+  total: Int!
+}
+
+type Query {
+  authors(count: Int!, page: Int): AuthorPaginator
+  author(id: ID): Author
+  instances(count: Int!, page: Int): InstancePaginator
+  instance(id: ID): Instance
+  names(fullName: String, count: Int!, page: Int): NamePaginator
+  name(id: ID): Name
+  references(count: Int!, page: Int): ReferencePaginator
+  reference(id: ID): Reference
+}
+
+type RefAuthorRole {
+  id: ID!
+  name: String!
+}
+
+type Reference {
+  id: ID!
+  abbrevTitle: String
+  author: Author!
+  bhlUri: String
+  citation: String
+  displayTitle: String
+  doi: String
+  edition: String
+  instances(count: Int!, page: Int): InstancePaginator
+  isbn: String
+  issn: String
+  language: Language # custom scalar
+  pages: String
+  parent: Reference
+  publicationDate: Date
+  published: Boolean
+  publishedLocation: String
+  publisher: String
+  refAuthorRole: RefAuthorRole!
+  refType: RefType!
+  title: String!
+  tl2: String ?
+  verbatimAuthor: String
+  volume: String
+  year: Int
+  identifiers: [
+    {"type": "doi", "value": "10.77/123"},
+    {"type": "isbn", "value": "108-78987-00"}
+  ],
+  links: [
+    {"resource": "bhl", "uri": "http://biodiversitylibrary.org/page/120015"}
+  ]
+}
+
+type ReferencePaginator {
+  paginatorInfo: PaginatorInfo!
+  data: [Reference!]!
+}
+
+type RefType {
+  id: ID!
+  name: String!
+  parent: RefType
+  parentOptional: Boolean
+  useParentDetails: Boolean
+}
+

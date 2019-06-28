@@ -1,0 +1,41 @@
+type Name {
+    id: ID!
+    author: Author
+    basAuthor: Author
+    basExAuthor: Author
+    exAuthor: Author
+    fullName: String!
+    nameElement: String!
+    namePath: String
+    nameRank: NameRank!
+    """
+    Status under the nomenclatural code that applies to the group of organisms 
+    being named.
+    """
+    nameStatus: NameStatus!
+    nameType: NameType!
+    orthVar: Boolean
+    parent: Name
+    """
+    Parent name. This relationship is between names and is helpful to construct 
+    combinations: names of rank genus and higher will not need it and will 
+    generally not have it. 
+    """
+    sortName: String
+    simpleName: String!
+    statusSummary: String
+    verbatimRank: String
+
+    instances: [Instance!]!
+    """
+    Subordinate names: species in a genus, subspecies or varieties for a speciess, 
+    etc. [Will be removed when the trees, which have the full hierarchical 
+    relationships between "taxa" are in the schema.]
+    """
+    children: [Name!]!
+    """
+    Primary or protologue instance of a name. In the NSL this is an instance with 
+    an instance type for which the primaryInstance attribute is true. 
+    """
+    primaryInstance: Instance
+}

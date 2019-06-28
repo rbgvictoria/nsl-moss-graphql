@@ -1,0 +1,244 @@
+type Author {
+  id: ID!
+  abbrev: String
+  fullName: String
+  ipniId: String
+  name: String!
+}
+
+interface TaxonomicNameUsageInterface {
+  id: ID!
+  name: Name!
+  bhlUrl: String
+  name: Name!
+  verbatimNameString: String
+}
+
+interface StandaloneNameUsageInterface {
+
+}
+
+interface NomenclaturalNoveltiyTNU {
+
+}
+
+interface RelationshipNameUsageInterface {
+  cites: TaxonomicNameUages!
+  citedBy: TaxonomicNameUsage!
+}
+
+interface SecondaryReferenceNameUsage {
+
+}
+
+
+type TaxonomicNameUsage implements TaxonomicNameUsageInterface {
+
+  
+  reference: Reference!
+  page: String
+  pageQualifier: String
+  
+  citedBy: TaxonomicNameUsage
+  cites: TaxonomicNameUsage
+
+  parent: TaxonomicNameUsage
+  
+  basionym: TaxonomicNameUsage
+  replacedSynonym: TaxonomicNameUsage
+  protonym: TaxonomicNameUsage
+  
+  acceptedNameUsage: TaxonomicNameUsage
+  homoTypicSynonyms: [TaxonomicNameUsage]
+  heteroTypicSynonyms: [TaxonomicNameUsage]
+
+  misapplications: [TaxonomicNameUsage]
+
+  notes: [TaxonomicNameUsageNote!]
+}
+
+type NewTaxonNameUsage implements 
+  TaxonomicNameUsageInterface, 
+  StandaloneNameUsageInterface, 
+  NomenclaturalNoveltiyTNU {}
+
+type NewCombinationNameUsage implements TaxonomicNameUsageInterface, StandaloneNameUsageInterface, NomenclaturalNoveltiyTNU {
+  basionym: NewTaxonNameUsage!
+}
+
+type TaxonomicNameUsageNotes {
+  id: ID!
+  taxonomicNameUsageNoteType: TaxonomicNameUsageNoteType!
+  value: String!
+}
+
+type TaxonomicNameUsageNoteType {
+  id: ID!
+  name: String!
+}
+
+"""
+type TaxonomicNameUsageType {
+  id: ID!
+  isDoubtful: Boolean
+  label: String
+  labelOfInverse: String # ofLabel
+  misapplied: Boolean
+  name: String!
+  isNomenclatural: Boolean
+  isPrimary: Boolean
+  isProParte: Boolean
+  isProtologue: Boolean
+  isRelationship: Boolean
+  isSecondaryInstance: Boolean
+  isStandalone: Boolean
+  isSynonym: Boolean
+  isTaxonomic: Boolean
+  isUnsourced: Boolean
+  isBidirectional: Boolean
+}
+"""
+
+type TaxonomicName {
+  #id: ID!
+
+  nameType: NameType!
+
+  "Name string without authors; may include rank prefix"
+  fullName: String! # simple_name
+
+  genericName: String
+  infragenericEpithet: String
+  specificEpithet: String
+  infraspecificEpithet: String
+  cultivarEpithet: String
+
+  parent: Name
+  secondParent: Name
+
+  "Full authorship"
+  authorship: String
+
+  author: Author
+  exAuthor: Author
+  basionymAuthor: Author
+  basionymExAuthor: Author
+
+  fullNameWithAuthor: String! # full_name  dcterms:title
+
+  publishedYear: Int
+
+  nameRank: NameRank!
+  verbatimRank: String
+
+  nomenclaturalCode: NomenclaturalCode!
+  nameStatus: NameStatus!
+
+  """
+  List of all TNUs with this TaxonomicName
+  """
+  taxonomicNameUsages: [TaxonomicNameUsage!]!
+  primaryTaxonomicNameUsage: Instance
+
+  familyName: String
+
+}
+
+type NameRank {
+  id: ID!
+  name: String!
+  parentRank: NameRank
+  isMajorRank: Boolean
+  sortOrder: Int
+  isVisibleInName: Boolean
+}
+
+type NameStatus {
+  id: ID!
+  name: String!
+  nomIlleg: Boolean
+  nomInval: Boolean
+}
+
+type NameType {
+  id: ID!
+  name: String!
+  isCultivar: Boolean
+  isFormula: Boolean
+  isHybrid: Boolean
+  scientific: Boolean
+}
+
+type Reference {
+  id: ID!
+  abbrevTitle: String
+  author: Author!
+  bhlUri: String
+  citation: String
+  displayTitle: String
+  doi: String
+  edition: String
+  instances(count: Int!, page: Int): InstancePaginator
+  isbn: String
+  issn: String
+  language: Language # custom scalar
+  pages: String
+  parent: Reference
+  publicationDate: Date
+  published: Boolean
+  publishedLocation: String
+  publisher: String
+  refAuthorRole: RefAuthorRole!
+  refType: RefType!
+  title: String!
+  tl2: String ?
+  verbatimAuthor: String
+  volume: String
+  year: Int
+  identifiers: [Identifier!]
+  links: [Link]
+  labels: [Label]
+}
+
+type ReferenceAuthorRole {
+  id: ID!
+  name: String!
+}
+
+type ReferenceType {
+  id: ID!
+  name: String!
+  parent: RefType
+  #parentOptional: Boolean
+  #useParentDetails: Boolean
+}
+
+type Label {
+  id: ID!
+  labelType: labelType!
+  value: String!
+}
+
+type LabelType {
+  id: ID!
+  name: String
+}
+
+type Link {
+  id: ID!
+  resource: Resource
+  url: String # we could create a Url custom scalar
+}
+
+type Resource {
+  id: ID!
+  name: String!
+}
+
+type Identifier {
+  id: ID!
+  type: Resource!
+  value: String!
+}
+
+

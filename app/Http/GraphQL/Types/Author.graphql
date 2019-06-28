@@ -1,0 +1,7 @@
+type Author {
+    id: ID!
+    abbrev: String
+    fullName: String
+    ipniId: String
+    name: String!
+}

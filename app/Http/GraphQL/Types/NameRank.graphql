@@ -1,0 +1,7 @@
+type NameRank {
+    id: ID!
+    name: String!
+    hasParent: Boolean!
+    parentRank: NameRank
+    nameGroup: NameGroup
+}

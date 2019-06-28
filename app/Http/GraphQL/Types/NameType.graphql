@@ -1,0 +1,9 @@
+type NameType {
+    id: ID!
+    name: String!
+    cultivar: Boolean
+    formula: Boolean
+    hybrid: Boolean
+    scientific: Boolean
+    nameGroup: NameGroup
+}

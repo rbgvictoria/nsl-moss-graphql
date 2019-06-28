@@ -1,0 +1,7 @@
+type RefType {
+    id: ID!
+    name: String!
+    parent: RefType
+    parentOptional: Boolean
+    useParentDetails: Boolean
+}

@@ -1,0 +1,50 @@
+"""
+Instance of a Name
+"""
+type Instance {
+    id: ID!
+    bhlUrl: String
+    citedBy: Instance
+    cites: Instance
+    draft: Boolean
+    instanceType: InstanceType!
+    name: Name!
+    nomenclaturalStatus: String
+    page: String
+    pageQualifier: String
+    parent: Instance
+    reference: Reference!
+    uri: String
+    verbatimNameString: String
+
+    "Shortcut to the name of the Instance Type"
+    instanceTypeName: String
+    """
+    All relationship instances for an instance. In the NSL data model these are 
+    linked to the instance through their citedBy attribute. Relationship 
+    instances include basionyms, synonyms, misapplications etc.
+    """
+    relationshipInstances: [Instance]
+    """
+    Instance with a 'basionym' or 'replaced synonym' relationship with the present
+    instance. Only primary instances can have a basionym instance. 
+    """
+    basionym: Instance
+    """
+    Instance for which this instance is a synonym.
+    """
+    synonymOf: Instance
+    """
+    Instances with a 'synonym' type relationship with the present instance. This 
+    includes nomenclatural synonyms, taxonomic synonyms etc.
+    """
+    synonyms: [Instance]
+    """
+    Instances with a 'misapplied' type relationship with the present instance. 
+    """
+    misapplications: [Instance]
+    """
+    Instance of name to which this name instance has been misapplied
+    """
+    misappliedTo: Instance
+}

@@ -1,0 +1,30 @@
+type Reference {
+    id: ID!
+    author: Author!
+    citation: String
+    shortRef: String
+    displayTitle: String
+    doi: String
+    edition: String
+    """
+    Instances for a reference. For references only standalone instances are 
+    provided.
+    """
+    instances: [TaxonomicNameUsage!]! @paginate(type: "paginator")
+    isbn: String
+    issn: String
+    pages: String
+    parent: Reference
+    publicationDate: Date
+    published: Boolean
+    publishedLocation: String
+    publisher: String
+    refAuthorRole: RefAuthorRole!
+    refType: RefType!
+    title: String!
+    tl2: String
+    uri: String
+    verbatimAuthor: String
+    volume: String
+    year: Int
+}
