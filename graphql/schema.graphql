@@ -1,0 +1,27 @@
+#import ../app/GraphQL/Types/Author.graphql
+#import ../app/GraphQL/Types/TaxonomicNameUsage.graphql
+#import ../app/GraphQL/Types/InstanceType.graphql
+#import ../app/GraphQL/Types/TaxonomicName.graphql
+#import ../app/GraphQL/Types/NameCategory.graphql
+#import ../app/GraphQL/Types/NameGroup.graphql
+#import ../app/GraphQL/Types/NameRank.graphql
+#import ../app/GraphQL/Types/NameStatus.graphql
+#import ../app/GraphQL/Types/NameType.graphql
+#import ../app/GraphQL/Types/RefAuthorRole.graphql
+#import ../app/GraphQL/Types/RefType.graphql
+#import ../app/GraphQL/Types/Reference.graphql
+#import ../app/GraphQL/Types/Scalars.graphql
+
+type Query {
+    authors: [Author!]! @paginate(type: "paginator")
+    author(id: ID @eq): Author @find
+
+    taxonomicNames(fullName: String @contains): [TaxonomicName!]! @paginate(type: "paginator", scopes: ["orderByFullName"])
+    taxonomicName(id: ID @eq): TaxonomicName @find
+
+    taxonomicNameUsages: [TaxonomicNameUsage!]! @paginate(type: "paginator")
+    taxonomicNameUsage(id: ID @eq): TaxonomicNameUsage @find
+
+    references: [Reference!]! @paginate(type: "paginator")
+    reference(id: ID @eq): Reference @find
+}
