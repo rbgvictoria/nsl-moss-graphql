@@ -4,8 +4,8 @@ Draft GraphpQL schema for the National Species Lists, implemented for the Moss s
 
 - GraphQL schema: https://github.com/rbgvictoria/nsl-mosses-graphql/blob/master/graphql/schema.graphql
 
-- includes: https://github.com/rbgvictoria/nsl-mosses-graphql/blob/master/QraphQL/Types
+- includes: https://github.com/rbgvictoria/nsl-mosses-graphql/tree/master/app/GraphQL/Types
 
-- Printed full schema: https://github.com/rbgvictoria/nsl-mosses-graphql/lighthouse-schema.graphql
+- Printed full schema: https://github.com/rbgvictoria/nsl-mosses-graphql/blob/master/lighthouse-schema.graphql
 
-- Models: https://github.com/rbgvictoria/nsl-mosses-graphql/blob/master/graphql/schema.graphql
+- Models: https://github.com/rbgvictoria/nsl-mosses-graphql/tree/master/app/Models
