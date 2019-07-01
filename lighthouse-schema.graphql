@@ -1,0 +1,453 @@
+interface AcceptedNameUsageInterface {
+  """
+  Taxonomic Name Usages with a 'heterotypic synonym' type relationship with 
+  the present TNU. Only Accepted Taxonomic Name Usages can have synonyms.
+  """
+  heterotypicSynonyms: [TaxonomicNameUsage]
+
+  """
+  Instances with a 'misapplied' type relationship with the present instance.
+  """
+  misapplicationAssertions: [TaxonomicNameUsage]
+}
+
+type Author {
+  id: ID!
+  abbrev: String
+  fullName: String
+  ipniId: String
+  name: String!
+}
+
+type AuthorPaginator {
+  paginatorInfo: PaginatorInfo!
+  data: [Author!]!
+}
+
+"""A date string with format 'Y-m-d', e.g. '2011-05-23'."""
+scalar Date
+
+"""
+A datetime string with format 'Y-m-d H:i:s', e.g. '2018-01-01 13:00:00'.
+"""
+scalar DateTime
+
+type NameCategory {
+  id: ID!
+  maxParentsAllowed: Int!
+  minParentsRequired: Int!
+  name: String!
+  sortOrder: Int!
+}
+
+type NameGroup {
+  id: ID!
+  name: String!
+}
+
+type NameRank {
+  id: ID!
+  name: String!
+  hasParent: Boolean!
+  parentRank: NameRank
+  nameGroup: NameGroup
+}
+
+type NameStatus {
+  id: ID!
+  name: String!
+  display: Boolean
+  nomIlleg: Boolean
+  nomInval: Boolean
+  nameGroup: NameGroup
+}
+
+type NameType {
+  id: ID!
+  name: String!
+  cultivar: Boolean
+  formula: Boolean
+  hybrid: Boolean
+  scientific: Boolean
+  nameGroup: NameGroup
+}
+
+interface NomenclaturalNoveltyNameUsageInterface {
+  """
+  Instance with a 'basionym' or 'replaced synonym' relationship with the present
+  instance. Only primary instances can have a basionym instance. 
+  """
+  basionym: TaxonomicNameUsage
+
+  """
+  Primary Taxonomic Name Usages with the same Protonym as the present TNU. 
+  Only Primary TNUs have homotypic synonyms.    
+  """
+  homotypicSynonyms: [TaxonomicNameUsage]
+}
+
+input OrderByClause {
+  field: String!
+  order: SortOrder!
+}
+
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+
+  """Total number of node in connection."""
+  total: Int
+
+  """Count of nodes in current request."""
+  count: Int
+
+  """Current page of request."""
+  currentPage: Int
+
+  """Last page in connection."""
+  lastPage: Int
+}
+
+type PaginatorInfo {
+  """Total count of available items in the page."""
+  count: Int!
+
+  """Current pagination page."""
+  currentPage: Int!
+
+  """Index of first item in the current page."""
+  firstItem: Int
+
+  """If collection has more pages."""
+  hasMorePages: Boolean!
+
+  """Index of last item in the current page."""
+  lastItem: Int
+
+  """Last page number of the collection."""
+  lastPage: Int!
+
+  """Number of items per page in the collection."""
+  perPage: Int!
+
+  """Total items available in the collection."""
+  total: Int!
+}
+
+interface ProtonymInterface {
+  """All Taxonomic Name Usages for a Protonym"""
+  taxonomicNameUsages: [TaxonomicNameUsage]
+}
+
+type Query {
+  authors(
+    """Limits number of fetched elements."""
+    count: Int!
+
+    """The offset from which elements are returned."""
+    page: Int
+  ): AuthorPaginator
+  author(id: ID): Author
+  taxonomicNames(
+    fullName: String
+
+    """Limits number of fetched elements."""
+    count: Int!
+
+    """The offset from which elements are returned."""
+    page: Int
+  ): TaxonomicNamePaginator
+  taxonomicName(id: ID): TaxonomicName
+  taxonomicNameUsages(
+    """Limits number of fetched elements."""
+    count: Int!
+
+    """The offset from which elements are returned."""
+    page: Int
+  ): TaxonomicNameUsagePaginator
+  taxonomicNameUsage(id: ID): TaxonomicNameUsage
+  references(
+    """Limits number of fetched elements."""
+    count: Int!
+
+    """The offset from which elements are returned."""
+    page: Int
+  ): ReferencePaginator
+  reference(id: ID): Reference
+}
+
+type RefAuthorRole {
+  id: ID!
+  name: String!
+}
+
+type RefType {
+  id: ID!
+  name: String!
+  parent: RefType
+  parentOptional: Boolean
+  useParentDetails: Boolean
+}
+
+type Reference {
+  id: ID!
+  author: Author!
+  citation: String
+  shortRef: String
+  displayTitle: String
+  doi: String
+  edition: String
+
+  """
+  Instances for a reference. For references only standalone instances are 
+  provided.
+  """
+  instances(
+    """Limits number of fetched elements."""
+    count: Int!
+
+    """The offset from which elements are returned."""
+    page: Int
+  ): TaxonomicNameUsagePaginator
+  isbn: String
+  issn: String
+  pages: String
+  parent: Reference
+  publicationDate: Date
+  published: Boolean
+  publishedLocation: String
+  publisher: String
+  refAuthorRole: RefAuthorRole!
+  refType: RefType!
+  title: String!
+  tl2: String
+  uri: String
+  verbatimAuthor: String
+  volume: String
+  year: Int
+}
+
+type ReferencePaginator {
+  paginatorInfo: PaginatorInfo!
+  data: [Reference!]!
+}
+
+interface RelationshipNameUsageInterface {
+  citedBy: TaxonomicNameUsage
+  cites: TaxonomicNameUsage
+
+  """Instance of name to which this name instance has been misapplied"""
+  misappliedTo: TaxonomicNameUsage
+}
+
+interface SecondaryReferenceNameUsageInterface {
+  primaryNameUsage: TaxonomicNameUsage
+}
+
+enum SortOrder {
+  ASC
+  DESC
+}
+
+interface StandAloneNameUsageInterface {
+  """
+  All relationship instances for an instance. In the NSL data model these are 
+  linked to the instance through their citedBy attribute. Relationship 
+  instances include basionyms, synonyms, misapplications etc.
+  """
+  relationshipInstances: [TaxonomicNameUsage]
+}
+
+interface SynonymNameUsageInterface {
+  """Instance for which this instance is a synonym."""
+  acceptedNameUsage: TaxonomicNameUsage
+}
+
+type TaxonomicName {
+  id: ID!
+
+  """Name string without authors; may include rank prefix"""
+  fullName: String!
+  nameElement: String!
+  genericName: String
+  infragenericEpithet: String
+  specificEpithet: String
+  infraspecificEpithet: String
+  cultivarEpithet: String
+  author: Author
+
+  """Full authorship"""
+  basionymAuthor: Author
+  basionymExAuthor: Author
+  exAuthor: Author
+
+  """Full name string, including authorship"""
+  authorship: String
+  fullNameWithAuthorship: String
+  publishedYear: Int
+  nomenclaturalCode: String
+  nameRank: NameRank!
+  verbatimRank: String
+
+  """
+  Status under the nomenclatural code that applies to the group of organisms 
+  being named.
+  """
+  nameStatus: NameStatus!
+
+  """Type of name"""
+  nameType: NameType!
+
+  """
+  Parent name. This relationship is between names and is helpful to construct 
+  combinations and formulas: names of rank genus and higher will not need it and 
+  will generally not have it.
+  """
+  parent: TaxonomicName
+
+  """Name of second parent; used in hybrid formulas"""
+  secondParent: TaxonomicName
+  namePath: String
+  sortName: String
+  statusSummary: String
+
+  """List of all Taxonomic Name Usages with this Taxonomic Name"""
+  taxonomicNameUsages: [TaxonomicNameUsage!]
+}
+
+type TaxonomicNamePaginator {
+  paginatorInfo: PaginatorInfo!
+  data: [TaxonomicName!]!
+}
+
+type TaxonomicNameUsage implements TaxonomicNameUsageInterface & StandAloneNameUsageInterface & AcceptedNameUsageInterface & NomenclaturalNoveltyNameUsageInterface & ProtonymInterface & SecondaryReferenceNameUsageInterface & SynonymNameUsageInterface & RelationshipNameUsageInterface {
+  id: ID!
+  bhlUrl: String
+  draft: Boolean
+  taxonomicNameUsageType: TaxonomicNameUsageType
+  taxonomicName: TaxonomicName
+  nomenclaturalStatus: String
+  page: String
+  pageQualifier: String
+  parent: TaxonomicNameUsage
+  reference: Reference!
+  uri: String
+  verbatimNameString: String
+  taxonomicNameUsageLabel: String
+
+  """
+  All Taxonomic Name Usages have a Protonym, which is the first legitimate 
+  publication of a Name (basionym or replaced synonym) or the TNU itself (when 
+  the TNU is a basionym itself, or an invalid name).
+  """
+  protonym: TaxonomicNameUsage
+  notes: [TaxonomicNameUsageNote]
+
+  """
+  All relationship instances for an instance. In the NSL data model these are 
+  linked to the instance through their citedBy attribute. Relationship 
+  instances include basionyms, synonyms, misapplications etc.
+  """
+  relationshipInstances: [TaxonomicNameUsage]
+
+  """
+  Taxonomic Name Usages with a 'heterotypic synonym' type relationship with 
+  the present TNU. Only Accepted Taxonomic Name Usages can have synonyms.
+  """
+  heterotypicSynonyms: [TaxonomicNameUsage]
+
+  """
+  Instances with a 'misapplied' type relationship with the present instance.
+  """
+  misapplicationAssertions: [TaxonomicNameUsage]
+
+  """
+  Instance with a 'basionym' or 'replaced synonym' relationship with the present
+  instance. Only primary instances can have a basionym instance. 
+  """
+  basionym: TaxonomicNameUsage
+
+  """
+  Primary Taxonomic Name Usages with the same Protonym as the present TNU. 
+  Only Primary TNUs have homotypic synonyms.    
+  """
+  homotypicSynonyms: [TaxonomicNameUsage]
+
+  """All Taxonomic Name Usages for a Protonym"""
+  taxonomicNameUsages: [TaxonomicNameUsage]
+  primaryNameUsage: TaxonomicNameUsage
+
+  """Instance for which this instance is a synonym."""
+  acceptedNameUsage: TaxonomicNameUsage
+  citedBy: TaxonomicNameUsage
+  cites: TaxonomicNameUsage
+
+  """Instance of name to which this name instance has been misapplied"""
+  misappliedTo: TaxonomicNameUsage
+}
+
+interface TaxonomicNameUsageInterface {
+  id: ID!
+  bhlUrl: String
+  draft: Boolean
+  taxonomicNameUsageType: TaxonomicNameUsageType
+  taxonomicName: TaxonomicName
+  nomenclaturalStatus: String
+  page: String
+  pageQualifier: String
+  parent: TaxonomicNameUsage
+  reference: Reference!
+  uri: String
+  verbatimNameString: String
+  taxonomicNameUsageLabel: String
+
+  """
+  All Taxonomic Name Usages have a Protonym, which is the first legitimate 
+  publication of a Name (basionym or replaced synonym) or the TNU itself (when 
+  the TNU is a basionym itself, or an invalid name).
+  """
+  protonym: TaxonomicNameUsage
+  notes: [TaxonomicNameUsageNote]
+}
+
+type TaxonomicNameUsageNote {
+  id: ID!
+  kindOfNote: String!
+  value: String!
+}
+
+type TaxonomicNameUsagePaginator {
+  paginatorInfo: PaginatorInfo!
+  data: [TaxonomicNameUsage!]!
+}
+
+type TaxonomicNameUsageType {
+  id: ID!
+  citing: Boolean
+  doubtful: Boolean
+  hasLabel: String
+  misapplied: Boolean
+  name: String!
+  nomenclatural: Boolean
+  ofLabel: String
+  primaryInstance: Boolean
+  proParte: Boolean
+  protologue: Boolean
+  relationship: Boolean
+  secondaryInstance: Boolean
+  sortOrder: Int
+  standalone: Boolean
+  synonym: Boolean
+  taxonomic: Boolean
+  unsourced: Boolean
+  bidirectional: Boolean
+}
