@@ -40,7 +40,7 @@ namespace App\Models;
  * @property Comment[] $comments
  * @property Resource[] $resources
  */
-class TaxonomicNameUsage extends BaseModel
+class TaxonomicNameUsage extends Instance
 {
     /**
      * The table associated with the model.
@@ -256,6 +256,16 @@ class TaxonomicNameUsage extends BaseModel
     public function getTaxonomicNameUsageLabelAttribute() 
     {
         return $this->taxonomic_name->full_name . ' sec. ' . $this->reference->short_ref;
+    }
+
+    /**
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getNotesAttribute()
+    {
+        return \App\Models\TaxonomicNameUsageNote
+                ::where('instance_id', $this->id)->get();
     }
 
 }

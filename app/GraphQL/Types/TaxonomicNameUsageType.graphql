@@ -1,4 +1,4 @@
-type InstanceType {
+type TaxonomicNameUsageType {
     id: ID!
     citing: Boolean
     doubtful: Boolean

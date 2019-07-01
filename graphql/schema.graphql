@@ -1,6 +1,7 @@
 #import ../app/GraphQL/Types/Author.graphql
 #import ../app/GraphQL/Types/TaxonomicNameUsage.graphql
-#import ../app/GraphQL/Types/InstanceType.graphql
+#import ../app/GraphQL/Types/TaxonomicNameUsageType.graphql
+#import ../app/GraphQL/Types/TaxonomicNameUsageNote.graphql
 #import ../app/GraphQL/Types/TaxonomicName.graphql
 #import ../app/GraphQL/Types/NameCategory.graphql
 #import ../app/GraphQL/Types/NameGroup.graphql

@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $updated_by
  * @property string $value
  * @property Instance $instance
+ * @property Namespace $namespace
  * @property InstanceNoteKey $instanceNoteKey
  */
 class InstanceNote extends Model

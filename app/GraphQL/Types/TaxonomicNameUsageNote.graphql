@@ -1,0 +1,5 @@
+type TaxonomicNameUsageNote {
+  id: ID!
+  kindOfNote: String!
+  value: String!
+}
