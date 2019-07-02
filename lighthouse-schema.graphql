@@ -95,105 +95,105 @@ input OrderByClause {
 
 type PageInfo {
   """
-	When paginating forwards, are there more items?
-	"""
+  When paginating forwards, are there more items?
+  """
   hasNextPage: Boolean!
 
   """
-	When paginating backwards, are there more items?
-	"""
+  When paginating backwards, are there more items?
+  """
   hasPreviousPage: Boolean!
 
   """
-	When paginating backwards, the cursor to continue.
-	"""
+  When paginating backwards, the cursor to continue.
+  """
   startCursor: String
 
   """
-	When paginating forwards, the cursor to continue.
-	"""
+  When paginating forwards, the cursor to continue.
+  """
   endCursor: String
 
   """
-	Total number of node in connection.
-	"""
+  Total number of node in connection.
+  """
   total: Int
 
   """
-	Count of nodes in current request.
-	"""
+  Count of nodes in current request.
+  """
   count: Int
 
   """
-	Current page of request.
-	"""
+  Current page of request.
+  """
   currentPage: Int
 
   """
-	Last page in connection.
-	"""
+  Last page in connection.
+  """
   lastPage: Int
 }
 
 type PaginatorInfo {
   """
-	Total count of available items in the page.
-	"""
+  Total count of available items in the page.
+  """
   count: Int!
 
   """
-	Current pagination page.
-	"""
+  Current pagination page.
+  """
   currentPage: Int!
 
   """
-	Index of first item in the current page.
-	"""
+  Index of first item in the current page.
+  """
   firstItem: Int
 
   """
-	If collection has more pages.
-	"""
+  If collection has more pages.
+  """
   hasMorePages: Boolean!
 
   """
-	Index of last item in the current page.
-	"""
+  Index of last item in the current page.
+  """
   lastItem: Int
 
   """
-	Last page number of the collection.
-	"""
+  Last page number of the collection.
+  """
   lastPage: Int!
 
   """
-	Number of items per page in the collection.
-	"""
+  Number of items per page in the collection.
+  """
   perPage: Int!
 
   """
-	Total items available in the collection.
-	"""
+  Total items available in the collection.
+  """
   total: Int!
 }
 
 interface ProtonymInterface {
   """
-	All Taxonomic Name Usages for a Protonym
-	"""
+  All Taxonomic Name Usages for a Protonym
+  """
   taxonomicNameUsages: [TaxonomicNameUsage]
 }
 
 type Query {
   authors(
     """
-		Limits number of fetched elements.
-	  """
+    Limits number of fetched elements.
+    """
     count: Int!
 
     """
-		The offset from which elements are returned.
-	  """
+    The offset from which elements are returned.
+    """
     page: Int
   ): AuthorPaginator
   author(id: ID): Author
@@ -201,37 +201,37 @@ type Query {
     fullName: String
 
     """
-		Limits number of fetched elements.
-  	"""
+    Limits number of fetched elements.
+    """
     count: Int!
 
     """
-		The offset from which elements are returned.
-	  """
+    The offset from which elements are returned.
+    """
     page: Int
   ): TaxonomicNamePaginator
   taxonomicName(id: ID): TaxonomicName
   taxonomicNameUsages(
     """
-		Limits number of fetched elements.
-  	"""
+    Limits number of fetched elements.
+    """
     count: Int!
 
     """
-		The offset from which elements are returned.
-	  """
+    The offset from which elements are returned.
+    """
     page: Int
   ): TaxonomicNameUsagePaginator
   taxonomicNameUsage(id: ID): TaxonomicNameUsage
   references(
     """
-		Limits number of fetched elements.
-	  """
+    Limits number of fetched elements.
+    """
     count: Int!
 
     """
-		The offset from which elements are returned.
-	  """
+    The offset from which elements are returned.
+    """
     page: Int
   ): ReferencePaginator
   reference(id: ID): Reference
@@ -265,13 +265,13 @@ type Reference {
   """
   instances(
     """
-		Limits number of fetched elements.
-	  """
+    Limits number of fetched elements.
+    """
     count: Int!
 
     """
-		The offset from which elements are returned.
-	  """
+    The offset from which elements are returned.
+    """
     page: Int
   ): TaxonomicNameUsagePaginator
   isbn: String
@@ -302,8 +302,8 @@ interface RelationshipNameUsageInterface {
   cites: TaxonomicNameUsage
 
   """
-	Instance of name to which this name instance has been misapplied
-	"""
+  Instance of name to which this name instance has been misapplied
+  """
   misappliedTo: TaxonomicNameUsage
 }
 
@@ -327,8 +327,8 @@ interface StandAloneNameUsageInterface {
 
 interface SynonymNameUsageInterface {
   """
-	Instance for which this instance is a synonym.
-	"""
+  Instance for which this instance is a synonym.
+  """
   acceptedNameUsage: TaxonomicNameUsage
 }
 
@@ -336,8 +336,8 @@ type TaxonomicName {
   id: ID!
 
   """
-	Name string without authors; may include rank prefix
-	"""
+  Name string without authors; may include rank prefix
+  """
   fullName: String!
   nameElement: String!
   genericName: String
@@ -348,15 +348,15 @@ type TaxonomicName {
   author: Author
 
   """
-	Full authorship
-	"""
+  Full authorship
+  """
   basionymAuthor: Author
   basionymExAuthor: Author
   exAuthor: Author
 
   """
-	Full name string, including authorship
-	"""
+  Full name string, including authorship
+  """
   authorship: String
   fullNameWithAuthorship: String
   publishedYear: Int
@@ -371,8 +371,8 @@ type TaxonomicName {
   nameStatus: NameStatus!
 
   """
-	Type of name
-	"""
+  Type of name
+  """
   nameType: NameType!
 
   """
@@ -383,16 +383,16 @@ type TaxonomicName {
   parent: TaxonomicName
 
   """
-	Name of second parent; used in hybrid formulas
-	"""
+  Name of second parent; used in hybrid formulas
+  """
   secondParent: TaxonomicName
   namePath: String
   sortName: String
   statusSummary: String
 
   """
-	List of all Taxonomic Name Usages with this Taxonomic Name
-	"""
+  List of all Taxonomic Name Usages with this Taxonomic Name
+  """
   taxonomicNameUsages: [TaxonomicNameUsage!]
 }
 
@@ -455,21 +455,21 @@ type TaxonomicNameUsage implements TaxonomicNameUsageInterface & StandAloneNameU
   homotypicSynonyms: [TaxonomicNameUsage]
 
   """
-	All Taxonomic Name Usages for a Protonym
-	"""
+  All Taxonomic Name Usages for a Protonym
+  """
   taxonomicNameUsages: [TaxonomicNameUsage]
   primaryNameUsage: TaxonomicNameUsage
 
   """
-	Instance for which this instance is a synonym.
-	"""
+  Instance for which this instance is a synonym.
+  """
   acceptedNameUsage: TaxonomicNameUsage
   citedBy: TaxonomicNameUsage
   cites: TaxonomicNameUsage
 
   """
-	Instance of name to which this name instance has been misapplied
-	"""
+  Instance of name to which this name instance has been misapplied
+  """
   misappliedTo: TaxonomicNameUsage
 }
 
