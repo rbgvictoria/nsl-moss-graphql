@@ -4,7 +4,6 @@ interface AcceptedNameUsageInterface {
   the present TNU. Only Accepted Taxonomic Name Usages can have synonyms.
   """
   heterotypicSynonyms: [TaxonomicNameUsage]
-
   """
   Instances with a 'misapplied' type relationship with the present instance.
   """
