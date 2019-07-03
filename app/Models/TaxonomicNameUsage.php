@@ -43,25 +43,6 @@ namespace App\Models;
 class TaxonomicNameUsage extends Instance
 {
     /**
-     * The table associated with the model.
-     * 
-     * @var string
-     */
-    protected $table = 'instance';
-
-    /**
-     * The "type" of the auto-incrementing ID.
-     * 
-     * @var string
-     */
-    protected $keyType = 'integer';
-
-    /**
-     * @var array
-     */
-    protected $fillable = ['cited_by_id', 'cites_id', 'instance_type_id', 'name_id', 'namespace_id', 'parent_id', 'reference_id', 'lock_version', 'bhl_url', 'created_at', 'created_by', 'draft', 'nomenclatural_status', 'page', 'page_qualifier', 'source_id', 'source_id_string', 'source_system', 'updated_at', 'updated_by', 'valid_record', 'verbatim_name_string', 'uri', 'cached_synonymy_html'];
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function cites()
@@ -234,9 +215,9 @@ class TaxonomicNameUsage extends Instance
      * 
      * @return \App\Models\TaxonomicNameUsage|null
      */
-    public function getSynonymOfAttribute()
+    public function getAcceptedNameUsageAttribute()
     {
-        if ($this->isTaxonomic || $this->isNomenclatural) {
+        if ($this->instance_type->taxonomic) {
             return TaxonomicNameUsage::where('id', $this->cited_by_id)
                     ->first();
         }

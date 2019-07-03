@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use Sofa\Eloquence\Eloquence;
-use Sofa\Eloquence\Mappable;
-
 /**
  * @property integer $id
  * @property integer $cited_by_id
@@ -45,24 +42,6 @@ use Sofa\Eloquence\Mappable;
  */
 class Instance extends BaseModel
 {
-    use Eloquence, Mappable;
-    
-    protected $maps = [
-        'isPrimaryInstance' => 'instance_type.primary_instance',
-        'instanceTypeName' => 'instance_type.name',
-        'isNomenclatural' => 'instance_type.nomenclatural',
-        'isTaxonomic' => 'instance_type.taxonomic',
-        'isMisapplied' => 'instance_type.misapplied',
-        'isStandalone' => 'instance_type.stand_alone',
-    ];
-    
-    protected $appends = [
-        'isPrimaryInstance',
-        'instanceTypeName',
-        'isNomenclatural',
-        'isTaxonomic',
-        'isStandalone',
-    ];
     
     /**
      * The table associated with the model.
