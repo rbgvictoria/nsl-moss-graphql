@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+
 /**
  * @property integer $id
  * @property integer $cited_by_id
@@ -78,9 +80,9 @@ class TaxonomicNameUsage extends Instance
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function instance_type()
+    public function taxonomic_name_usage_type()
     {
-        return $this->belongsTo('App\Models\InstanceType');
+        return parent::instance_type();
     }
 
     /**
@@ -178,7 +180,7 @@ class TaxonomicNameUsage extends Instance
      */
     public function getHeterotypicSynonymsAttribute()
     {
-        $synonymTypes = \App\Models\InstanceType::where('taxonomic', true)
+        $synonymTypes = \App\Models\InstanceType::where('name', 'taxonomic synonym')
                 ->pluck('id');
         return TaxonomicNameUsage::where('cited_by_id', $this->id)
                 ->whereIn('instance_type_id', $synonymTypes)->get();
@@ -217,7 +219,7 @@ class TaxonomicNameUsage extends Instance
      */
     public function getAcceptedNameUsageAttribute()
     {
-        if ($this->instance_type->taxonomic) {
+        if ($this->instance_type->name === 'taxonomic synonym') {
             return TaxonomicNameUsage::where('id', $this->cited_by_id)
                     ->first();
         }
@@ -247,6 +249,15 @@ class TaxonomicNameUsage extends Instance
     {
         return \App\Models\TaxonomicNameUsageNote
                 ::where('instance_id', $this->id)->get();
+    }
+
+    public function build($root, array $args): Builder
+    {
+        return \App\Models\TaxonomicNameUsage
+                ::whereHas('instance_type', function($builder) {
+                    $builder->where('standalone', true)
+                            ->orWhere('name', 'taxonomic synonym');
+                });
     }
 
 }
