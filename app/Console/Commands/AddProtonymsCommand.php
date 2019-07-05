@@ -12,7 +12,7 @@ class AddProtonymsCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'nsl:protonyms:add';
+    protected $signature = 'nsl:add-protonyms';
 
     /**
      * The console command description.
