@@ -9,6 +9,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 /**
  * Description of BaseModel
@@ -34,4 +35,25 @@ class BaseModel extends Model {
     {
          return 'Y-m-d H:i:s.u';
     }
+
+    public function getNamespaceAttribute()
+    {
+        return \App\Models\NamespaceModel::find($this->namespace_id);
+    }
+
+    public function getUriAttribute()
+    {
+        $base = 'https://id.biodiversity.org.au/';
+        if ($this->namespace) {
+            $base .=  Str::kebab(Str::camel($this->table)) . '/' . $this->namespace->rdf_id . '/';
+        }
+        else {
+            $base .= 'vocabulary/' . Str::kebab(Str::camel($this->table)) . '/';
+        }
+        if ($this->rdf_id) {
+            return $base . $this->rdf_id;
+        } 
+        return $base . $this->id;
+    }
+
 }

@@ -1,5 +1,5 @@
 type Reference {
-    id: ID!
+    id: ID! @rename(attribute: "uri")
     author: Author!
     citation: String
     shortRef: String

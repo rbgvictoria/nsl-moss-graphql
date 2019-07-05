@@ -20,7 +20,7 @@ type Query {
     taxonomicNames(fullName: String @contains): [TaxonomicName!]! @paginate(type: "paginator", scopes: ["orderByFullName"])
     taxonomicName(id: ID @eq): TaxonomicName @find
 
-    taxonomicNameUsages: [TaxonomicNameUsage!]! @paginate(type: "paginator")
+    taxonomicNameUsages: [TaxonomicNameUsage!]! @paginate(builder: "App\\Models\\TaxonomicNameUsage@build")
     taxonomicNameUsage(id: ID @eq): TaxonomicNameUsage @find
 
     references: [Reference!]! @paginate(type: "paginator")

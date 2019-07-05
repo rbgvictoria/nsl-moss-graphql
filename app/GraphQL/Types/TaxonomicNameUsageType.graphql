@@ -1,5 +1,5 @@
 type TaxonomicNameUsageType {
-    id: ID!
+    id: ID! @rename(attribute: "uri")
     citing: Boolean
     doubtful: Boolean
     hasLabel: String

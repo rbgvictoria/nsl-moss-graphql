@@ -1,7 +1,7 @@
 type Author {
-    id: ID!
+    id: ID! @rename(attribute: "uri")
     abbrev: String
     fullName: String
     ipniId: String
-    name: String!
+    name: String
 }

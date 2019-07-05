@@ -1,5 +1,5 @@
 type NameRank {
-    id: ID!
+    id: ID! @rename(attribute: "uri")
     name: String!
     hasParent: Boolean!
     parentRank: NameRank

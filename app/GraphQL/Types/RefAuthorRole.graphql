@@ -1,4 +1,4 @@
 type RefAuthorRole {
-    id: ID!
+    id: ID! @rename(attribute: "uri")
     name: String!
 }

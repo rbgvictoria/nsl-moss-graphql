@@ -1,5 +1,5 @@
 type NameStatus {
-    id: ID!
+    id: ID! @rename(attribute: "uri")
     name: String!
     display: Boolean
     nomIlleg: Boolean

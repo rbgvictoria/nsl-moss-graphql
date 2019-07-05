@@ -1,5 +1,5 @@
 type NameType {
-    id: ID!
+    id: ID! @rename(attribute: "uri")
     name: String!
     cultivar: Boolean
     formula: Boolean

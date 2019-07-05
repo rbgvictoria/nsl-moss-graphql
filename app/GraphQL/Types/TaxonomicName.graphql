@@ -1,5 +1,5 @@
 type TaxonomicName {
-  id: ID!
+  id: ID! @rename(attribute: "uri")
   "Name string without authors; may include rank prefix"
   fullName: String! @rename(attribute: "simple_name")
   nameElement: String!

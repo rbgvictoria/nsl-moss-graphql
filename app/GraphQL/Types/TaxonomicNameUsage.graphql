@@ -1,5 +1,5 @@
 interface TaxonomicNameUsageInterface {
-    id: ID!
+    id: ID! @rename(attribute: "uri")
     bhlUrl: String
     draft: Boolean
     taxonomicNameUsageType: TaxonomicNameUsageType
@@ -92,7 +92,7 @@ type TaxonomicNameUsage implements TaxonomicNameUsageInterface
         & SynonymNameUsageInterface
         & RelationshipNameUsageInterface
     {
-    id: ID!
+    id: ID! @rename(attribute: "uri")
     bhlUrl: String
     draft: Boolean
     taxonomicNameUsageType: TaxonomicNameUsageType

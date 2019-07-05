@@ -1,5 +1,5 @@
 type NameCategory {
-    id: ID!
+    id: ID! @rename(attribute: "uri")
     maxParentsAllowed: Int!
     minParentsRequired: Int!
     name: String!

@@ -1,5 +1,5 @@
 type TaxonomicNameUsageNote {
-  id: ID!
+  id: ID! @rename(attribute: "uri")
   kindOfNote: String!
   value: String!
 }
