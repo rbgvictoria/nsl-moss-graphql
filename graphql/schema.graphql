@@ -12,6 +12,8 @@
 #import ../app/GraphQL/Types/RefType.graphql
 #import ../app/GraphQL/Types/Reference.graphql
 #import ../app/GraphQL/Types/Scalars.graphql
+#import ../app/GraphQL/Types/TaxonomicNameUsageFilter.graphql
+
 
 type Query {
     authors: [Author!]! @paginate(type: "paginator")
@@ -20,7 +22,9 @@ type Query {
     taxonomicNames(fullName: String @contains): [TaxonomicName!]! @paginate(type: "paginator", scopes: ["orderByFullName"])
     taxonomicName(id: ID @eq): TaxonomicName @find
 
-    taxonomicNameUsages: [TaxonomicNameUsage!]! @paginate(builder: "App\\Models\\TaxonomicNameUsage@build")
+    taxonomicNameUsages(
+        filter: TaxonomicNameUsageFilter
+    ): [TaxonomicNameUsage!]! @paginate(builder: "App\\Models\\TaxonomicNameUsage@build")
     taxonomicNameUsage(id: ID @eq): TaxonomicNameUsage @find
 
     references: [Reference!]! @paginate(type: "paginator")

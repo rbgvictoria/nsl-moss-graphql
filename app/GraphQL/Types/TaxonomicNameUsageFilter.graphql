@@ -1,0 +1,6 @@
+input TaxonomicNameUsageFilter {
+  name: String
+  taxonomicStatus: String
+  nomenclaturalStatus: String
+  taxonomicNameUsageType: String
+}

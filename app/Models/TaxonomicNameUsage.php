@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\TaxonomicNameUsageSearch\TaxonomicNameUsageSearch as Search;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -251,13 +252,17 @@ class TaxonomicNameUsage extends Instance
                 ::where('instance_id', $this->id)->get();
     }
 
+    /**
+     * Builder for taxonomicNameUsages Query
+     *
+     * @param [type] $roots
+     * @param array $args
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function build($root, array $args): Builder
     {
-        return \App\Models\TaxonomicNameUsage
-                ::whereHas('instance_type', function($builder) {
-                    $builder->where('standalone', true)
-                            ->orWhere('name', 'taxonomic synonym');
-                });
+        $filter = isset($args['filter']) ? $args['filter'] : null;
+        return Search::apply($filter);     
     }
 
 }
