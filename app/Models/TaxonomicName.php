@@ -295,19 +295,21 @@ class TaxonomicName extends BaseModel
      */
     public function getAuthorshipAttribute() 
     {
-        $authorship = '';
-        if ($this->basAuthor) {
-            $authorship .= '(';
-            if ($this->exBasAuthor) {
-                $authorship .= $this->exBasAuthor->abbrev . ' ex ';
+        if ($this->author) {
+            $authorship = '';
+            if ($this->basAuthor) {
+                $authorship .= '(';
+                if ($this->exBasAuthor) {
+                    $authorship .= $this->exBasAuthor->abbrev . ' ex ';
+                }
+                $authorship .= $this->basAuthor->abbrev . ') ';
             }
-            $authorship .= $this->basAuthor->abbrev . ') ';
+            if ($this->exAuthor) {
+                $authorship .= $this->exAuthor->abbrev . ' ex ';
+            }
+            $authorship .= $this->author->abbrev;
+            return $authorship;
         }
-        if ($this->exAuthor) {
-            $authorship .= $this->exAuthor->abbrev . ' ex ';
-        }
-        $authorship .= $this->author->abbrev;
-        return $authorship;
     }
 
     /**

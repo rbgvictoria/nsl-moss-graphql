@@ -4,7 +4,6 @@ interface TaxonomicNameUsageInterface {
     draft: Boolean
     taxonomicNameUsageType: TaxonomicNameUsageType
     taxonomicName: TaxonomicName
-    nomenclaturalStatus: String
     page: String
     pageQualifier: String
     parent: TaxonomicNameUsage
@@ -97,7 +96,6 @@ type TaxonomicNameUsage implements TaxonomicNameUsageInterface
     draft: Boolean
     taxonomicNameUsageType: TaxonomicNameUsageType
     taxonomicName: TaxonomicName
-    nomenclaturalStatus: String
     page: String
     pageQualifier: String
     parent: TaxonomicNameUsage

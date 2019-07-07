@@ -25,7 +25,7 @@ type TaxonomicName {
   Status under the nomenclatural code that applies to the group of organisms 
   being named.
   """
-  nameStatus: NameStatus!
+  nomenclaturalStatus: NameStatus! @rename(attribute: "name_status")
   """
   Type of name
   """

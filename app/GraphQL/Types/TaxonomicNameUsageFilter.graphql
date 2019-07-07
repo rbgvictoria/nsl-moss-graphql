@@ -3,4 +3,11 @@ input TaxonomicNameUsageFilter {
   taxonomicStatus: String
   nomenclaturalStatus: String
   taxonomicNameUsageType: String
+  protonym: Boolean
+  primary: Boolean
+  newTaxon: Boolean
+  newCombination: Boolean
+  newName: Boolean
+  newStatus: Boolean
+  autonym: Boolean
 }
