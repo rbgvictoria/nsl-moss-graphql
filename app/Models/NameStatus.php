@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 /**
  * @property integer $id
  * @property integer $name_group_id
@@ -19,7 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property NameGroup $nameGroup
  * @property Name[] $names
  */
-class NameStatus extends Model
+class NameStatus extends BaseModel
 {
     /**
      * The table associated with the model.
