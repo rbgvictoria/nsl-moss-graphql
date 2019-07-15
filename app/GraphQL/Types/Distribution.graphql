@@ -1,0 +1,5 @@
+type Distribution {
+  id: ID!
+  location: Location!
+  occurrenceStatus: String
+}

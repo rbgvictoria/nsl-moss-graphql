@@ -77,6 +77,16 @@ class Instance extends BaseModel
     {
         return $this->belongsTo('App\Models\Name');
     }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function getTaxonomicNameAttribute()
+    {
+        return \App\Models\TaxonomicName::where('id', $this->name_id)->first();
+    }
     
     /**
      * 

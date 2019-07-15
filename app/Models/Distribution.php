@@ -2,37 +2,62 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 /**
- * @property integer $id
- * @property integer $lock_version
- * @property string $description
- * @property boolean $is_doubtfully_naturalised
- * @property boolean $is_extinct
- * @property boolean $is_native
- * @property boolean $is_naturalised
- * @property string $region
+ * 
  */
-class Distribution extends Model
+class Distribution extends BaseModel
 {
     /**
      * The table associated with the model.
      * 
      * @var string
      */
-    protected $table = 'distribution';
-
-    /**
-     * The "type" of the auto-incrementing ID.
-     * 
-     * @var string
-     */
-    protected $keyType = 'integer';
+    protected $table = 'tree_element_distribution_entries';
 
     /**
      * @var array
      */
-    protected $fillable = ['lock_version', 'description', 'is_doubtfully_naturalised', 'is_extinct', 'is_native', 'is_naturalised', 'region'];
+    protected $fillable = [];
 
+    /**
+     * 
+     * @return \App\Models\Location
+     */
+    public function getLocationAttribute()
+    {
+        return Location::join('dist_entry', 'dist_region.id', '=', 'dist_entry.region_id')
+                ->join('tree_element_distribution_entries', 'dist_entry.id', '=', 'tree_element_distribution_entries.dist_entry_id')
+                ->where('tree_element_distribution_entries.tree_element_id', $this->tree_element_id)
+                ->where('tree_element_distribution_entries.dist_entry_id', $this->dist_entry_id)
+                ->select('dist_region.*')
+                ->first();          
+    }
+
+    /**
+     * @return \String
+     */
+    public function getIdAttribute() 
+    {
+        $instanceId = DB::table('tree_element')
+                ->where('id', $this->tree_element_id)
+                ->value('instance_id');
+        $locationId = $this->location->id;
+        return $instanceId . '_' . $locationId;
+    }
+
+    /**
+     * 
+     *
+     * @return \String
+     */
+    public function getOccurrenceStatusAttribute()
+    {
+        $status = DB::table('dist_status')
+                ->join('dist_entry_dist_status', 'dist_status.id', '=', 'dist_entry_dist_status.dist_status_id')
+                ->where('dist_entry_dist_status.dist_entry_status_id', $this->dist_entry_id)
+                ->value('name');
+        return ($status === 'uncertain') ? 'doubtful' : 'present';
+    }
 }

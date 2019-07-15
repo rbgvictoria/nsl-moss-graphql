@@ -2,56 +2,37 @@ type TaxonomicName {
   id: ID! @rename(attribute: "uri")
   "Name string without authors; may include rank prefix"
   fullName: String! @rename(attribute: "simple_name")
-  nameElement: String!
   genericName: String
   infragenericEpithet: String
   specificEpithet: String
   infraspecificEpithet: String
   cultivarEpithet: String
 
-  author: Author
-  "Full authorship"
-  basionymAuthor: Author @rename(attribute: "bas_author")
-  basionymExAuthor: Author @rename(attribute: "bas_ex_author")
-  exAuthor: Author
-  "Full name string, including authorship"
   authorship: String
   fullNameWithAuthorship: String @rename(attribute: "full_name")
+
+  author: Author
+  exAuthor: Author
+  basionymAuthor: Author @rename(attribute: "bas_author")
+  basionymExAuthor: Author @rename(attribute: "bas_ex_author")
+  
+  namePublishedIn: Reference
   publishedYear: Int
-  nomenclaturalCode: String
-  nameRank: NameRank!
+
+  rank: NameRank! @rename(attribute: "name_rank")
   verbatimRank: String
+
+  nomenclaturalCode: String
   """
   Status under the nomenclatural code that applies to the group of organisms 
   being named.
   """
   nomenclaturalStatus: NameStatus! @rename(attribute: "name_status")
-  """
-  Type of name
-  """
-  nameType: NameType!
-  """
-  Parent name. This relationship is between names and is helpful to construct 
-  combinations and formulas: names of rank genus and higher will not need it and 
-  will generally not have it.
-  """
-  parent: TaxonomicName
-  """
-  Name of second parent; used in hybrid formulas
-  """
-  secondParent: TaxonomicName
-
-  namePath: String
-  sortName: String
-  statusSummary: String
 
   """
   List of all Taxonomic Name Usages with this Taxonomic Name
   """
   taxonomicNameUsages: [TaxonomicNameUsage!]
-
-
-
-
-
+  basionym: TaxonomicName
+  otherCombinations: [TaxonomicName]
 }

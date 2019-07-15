@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\TaxonomicNameUsageSearch\TaxonomicNameUsageSearch as Search;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property integer $id
@@ -263,6 +264,123 @@ class TaxonomicNameUsage extends Instance
     {
         $filter = isset($args['filter']) ? $args['filter'] : null;
         return Search::apply($filter);     
+    }
+
+    /**
+     *
+     * @return \App\Models\TaxonomicNameUsage|null
+     */
+    public function getParentAttribute()
+    {
+        $parentId = DB::table('instance as i')
+                ->join('tree_element as te', 'i.id', '=', 'te.instance_id')
+                ->join('tree_version_element as tve', 'te.id', 'tve.tree_element_id')
+                ->join('tree_version_element as tvp', 'tve.parent_id', '=', 'tvp.element_link')
+                ->join('tree_element as tp', 'tvp.tree_element_id', '=', 'tp.id')
+                ->where(function($query) {
+                    $currentTree = DB::table('tree_version')->where(function($query) {
+                        $treeLastPublishedDate = DB::table('tree_version')
+                            ->where('published', true)
+                            ->max('published_at');
+                        $query->where('published_at', $treeLastPublishedDate);
+                    })->value('id');
+                })
+                ->where('i.id', $this->id)
+                ->value('tp.instance_id');
+        return \App\Models\TaxonomicNameUsage::find($parentId);
+    }
+
+    /**
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getChildrenAttribute()
+    {
+        $childIds = DB::table('instance as i')
+                ->join('name as n', 'i.name_id', '=', 'n.id')
+                ->join('tree_element as te', 'i.id', '=', 'te.instance_id')
+                ->join('tree_version_element as tve', 'te.id', 'tve.tree_element_id')
+                ->join('tree_version_element as tvp', 'tve.parent_id', '=', 'tvp.element_link')
+                ->join('tree_element as tp', 'tvp.tree_element_id', '=', 'tp.id')
+                ->where(function($query) {
+                    $currentTree = DB::table('tree_version')->where(function($query) {
+                        $treeLastPublishedDate = DB::table('tree_version')
+                            ->where('published', true)
+                            ->max('published_at');
+                        $query->where('published_at', $treeLastPublishedDate);
+                    })->value('id');
+                    $query->where('tve.tree_version_id', $currentTree);
+                })
+                ->where('tp.instance_id', $this->id)
+                ->orderBy('n.full_name')
+                ->pluck('i.id');
+        
+        $children = [];
+        foreach ($childIds as $id) {
+            $children[] = \App\Models\TaxonomicNameUsage::find($id);
+        }
+        return collect($children);
+    }
+
+    public function getBranchAttribute()
+    {
+        $currentTreeVersion = DB::table('tree_version')->where(function($query) {
+            $treeLastPublishedDate = DB::table('tree_version')
+                ->where('published', true)
+                ->max('published_at');
+            $query->where('published_at', $treeLastPublishedDate);
+        })->value('id');
+    
+        $ids = DB::table('tree_version_element as tve')
+                ->join('tree_version_element as tvp', 'tve.tree_path', 'like', DB::raw("tvp.tree_path || '%'"))
+                ->join('tree_element as tp', 'tvp.tree_element_id', '=', 'tp.id')
+                ->where('tp.instance_id', $this->id)
+                ->where('tve.tree_version_id', $currentTreeVersion)
+                ->where('tvp.tree_version_id', $currentTreeVersion)
+                ->orderBy('tve.name_path')
+                ->pluck('tve.taxon_id');
+        $nodes = [];
+        foreach ($ids as $id) {
+            $nodes[] = TreeNode::where('taxon_id', $id)->first();
+        }
+        return collect($nodes);
+    }
+
+    public function getClassificationAttribute()
+    {
+        $currentTreeVersion = DB::table('tree_version')->where(function($query) {
+            $treeLastPublishedDate = DB::table('tree_version')
+                ->where('published', true)
+                ->max('published_at');
+            $query->where('published_at', $treeLastPublishedDate);
+        })->value('id');
+    
+        $ids = DB::table('tree_version_element as tve')
+                ->join('tree_version_element as tvp', 'tvp.tree_path', 'like', DB::raw("tve.tree_path || '%'"))
+                ->join('tree_element as tp', 'tvp.tree_element_id', '=', 'tp.id')
+                ->where('tp.instance_id', $this->id)
+                ->where('tve.tree_version_id', $currentTreeVersion)
+                ->where('tvp.tree_version_id', $currentTreeVersion)
+                ->orderBy('tve.name_path')
+                ->pluck('tve.taxon_id');
+        $classification = [];
+        foreach ($ids as $id) {
+            $classification[] = TreeNode::where('taxon_id', $id)->first()->taxonomicNameUsage;
+        }
+        return collect($classification);
+    }
+
+    /**
+     * 
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getDistributionAttribute()
+    {
+        return Distribution
+                ::join('tree_element', 'tree_element_distribution_entries.tree_element_id', '=', 'tree_element.id')
+                ->where('tree_element.instance_id', $this->id)
+                ->select('tree_element_distribution_entries.*')
+                ->get();
     }
 
 }

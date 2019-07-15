@@ -13,20 +13,23 @@
 #import ../app/GraphQL/Types/Reference.graphql
 #import ../app/GraphQL/Types/Scalars.graphql
 #import ../app/GraphQL/Types/TaxonomicNameUsageFilter.graphql
+#import ../app/GraphQL/Types/TreeNode.graphql
+#import ../app/GraphQL/Types/Location.graphql
+#import ../app/GraphQL/Types/Distribution.graphql
 
 
 type Query {
     authors: [Author!]! @paginate(type: "paginator")
-    author(id: ID @eq): Author @find
+    author(id: ID @eqUri): Author @find
 
     taxonomicNames(fullName: String @contains): [TaxonomicName!]! @paginate(type: "paginator", scopes: ["orderByFullName"])
-    taxonomicName(id: ID @eq): TaxonomicName @find
+    taxonomicName(id: ID @eqUri): TaxonomicName @find
 
     taxonomicNameUsages(
         filter: TaxonomicNameUsageFilter
     ): [TaxonomicNameUsage!]! @paginate(builder: "App\\Models\\TaxonomicNameUsage@build")
-    taxonomicNameUsage(id: ID @eq): TaxonomicNameUsage @find
+    taxonomicNameUsage(id: ID @eqUri): TaxonomicNameUsage @find
 
     references: [Reference!]! @paginate(type: "paginator")
-    reference(id: ID @eq): Reference @find
+    reference(id: ID @eqUri): Reference @find
 }

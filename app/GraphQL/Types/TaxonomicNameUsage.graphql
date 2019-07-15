@@ -1,158 +1,20 @@
-interface TaxonomicNameUsageInterface {
+type TaxonomicNameUsage {
     id: ID! @rename(attribute: "uri")
-    bhlUrl: String
-    draft: Boolean
-    taxonomicNameUsageType: TaxonomicNameUsageType
     taxonomicName: TaxonomicName
-    page: String
-    pageQualifier: String
-    parent: TaxonomicNameUsage
-    reference: Reference!
-    uri: String
+    accordingTo: Reference! @rename(attribute: "reference")
+    microReference: String @rename(attribute: "page")
     verbatimNameString: String
     taxonomicNameUsageLabel: String
-    """
-    All Taxonomic Name Usages have a Protonym, which is the first legitimate 
-    publication of a Name (basionym or replaced synonym) or the TNU itself (when 
-    the TNU is a basionym itself, or an invalid name).
-    """
-    protonym: TaxonomicNameUsage
-    notes: [TaxonomicNameUsageNote]
-}
 
-interface StandAloneNameUsageInterface {
-    """
-    All relationship instances for an instance. In the NSL data model these are 
-    linked to the instance through their citedBy attribute. Relationship 
-    instances include basionyms, synonyms, misapplications etc.
-    """
-    relationshipInstances: [TaxonomicNameUsage]
-}
-
-interface AcceptedNameUsageInterface {
-    """
-    Taxonomic Name Usages with a 'heterotypic synonym' type relationship with 
-    the present TNU. Only Accepted Taxonomic Name Usages can have synonyms.
-    """
-    heterotypicSynonyms: [TaxonomicNameUsage]
-    """
-    Instances with a 'misapplied' type relationship with the present instance.
-    """
-    misapplicationAssertions: [TaxonomicNameUsage]
-}
-
-interface NomenclaturalNoveltyNameUsageInterface {
-    """
-    Instance with a 'basionym' or 'replaced synonym' relationship with the present
-    instance. Only primary instances can have a basionym instance. 
-    """
-    basionym: TaxonomicNameUsage
-    """
-    Primary Taxonomic Name Usages with the same Protonym as the present TNU. 
-    Only Primary TNUs have homotypic synonyms.    
-    """
-    homotypicSynonyms: [TaxonomicNameUsage]
-}
-
-interface ProtonymInterface {
-    """
-    All Taxonomic Name Usages for a Protonym
-    """
-    taxonomicNameUsages: [TaxonomicNameUsage]
-}
-
-interface SecondaryReferenceNameUsageInterface {
-    primaryNameUsage: TaxonomicNameUsage
-}
-
-
-interface SynonymNameUsageInterface {
-    """
-    Instance for which this instance is a synonym.
-    """
-    acceptedNameUsage: TaxonomicNameUsage
-}
-
-interface RelationshipNameUsageInterface {
-    citedBy: TaxonomicNameUsage
-    cites: TaxonomicNameUsage
-    """
-    Instance of name to which this name instance has been misapplied
-    """
-    misappliedTo: TaxonomicNameUsage
-}
-
-type TaxonomicNameUsage implements TaxonomicNameUsageInterface 
-        & StandAloneNameUsageInterface 
-        & AcceptedNameUsageInterface 
-        & NomenclaturalNoveltyNameUsageInterface 
-        & ProtonymInterface
-        & SecondaryReferenceNameUsageInterface 
-        & SynonymNameUsageInterface
-        & RelationshipNameUsageInterface
-    {
-    id: ID! @rename(attribute: "uri")
-    bhlUrl: String
-    draft: Boolean
-    taxonomicNameUsageType: TaxonomicNameUsageType
-    taxonomicName: TaxonomicName
-    page: String
-    pageQualifier: String
-    parent: TaxonomicNameUsage
-    reference: Reference!
-    uri: String
-    verbatimNameString: String
-    taxonomicNameUsageLabel: String
-    """
-    All Taxonomic Name Usages have a Protonym, which is the first legitimate 
-    publication of a Name (basionym or replaced synonym) or the TNU itself (when 
-    the TNU is a basionym itself, or an invalid name).
-    """
-    protonym: TaxonomicNameUsage
     notes: [TaxonomicNameUsageNote]
     """
-    All relationship instances for an instance. In the NSL data model these are 
-    linked to the instance through their citedBy attribute. Relationship 
-    instances include basionyms, synonyms, misapplications etc.
-    """
-    relationshipInstances: [TaxonomicNameUsage]
-
-    """
-    Taxonomic Name Usages with a 'heterotypic synonym' type relationship with 
-    the present TNU. Only Accepted Taxonomic Name Usages can have synonyms.
-    """
-    heterotypicSynonyms: [TaxonomicNameUsage]
-    """
-    Instances with a 'misapplied' type relationship with the present instance.
-    """
-    misapplicationAssertions: [TaxonomicNameUsage]
-
-    """
-    Instance with a 'basionym' or 'replaced synonym' relationship with the present
-    instance. Only primary instances can have a basionym instance. 
-    """
-    basionym: TaxonomicNameUsage
-    """
-    Primary Taxonomic Name Usages with the same Protonym as the present TNU. 
-    Only Primary TNUs have homotypic synonyms.    
-    """
-    homotypicSynonyms: [TaxonomicNameUsage]
-    """
-    All Taxonomic Name Usages for a Protonym
-    """
-    taxonomicNameUsages: [TaxonomicNameUsage]
-
-    primaryNameUsage: TaxonomicNameUsage
-
-    """
-    Instance for which this instance is a synonym.
+    Accepted name usage for this Taxonomic Name Usage.
     """
     acceptedNameUsage: TaxonomicNameUsage
 
-    citedBy: TaxonomicNameUsage
-    cites: TaxonomicNameUsage
-    """
-    Instance of name to which this name instance has been misapplied
-    """
-    misappliedTo: TaxonomicNameUsage
+    parent: TaxonomicNameUsage
+    children: [TaxonomicNameUsage]
+    classification: [TaxonomicNameUsage]
+    branch: [TreeNode]
+    distribution: [Distribution]
 }

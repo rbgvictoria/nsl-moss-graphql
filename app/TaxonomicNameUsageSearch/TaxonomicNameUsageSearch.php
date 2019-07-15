@@ -38,7 +38,10 @@ class TaxonomicNameUsageSearch {
     {
         $builder = \App\Models\TaxonomicNameUsage
                 ::whereHas('instance_type', function($builder) {
-                    $builder->where('standalone', true)
+                    $builder->orWhere(Function($query) {
+                                $query->where('standalone', true)
+                                        ->where('primary_instance', false);
+                            })
                             ->orWhere('name', 'taxonomic synonym');
                 });
 

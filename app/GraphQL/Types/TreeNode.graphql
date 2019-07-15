@@ -1,0 +1,5 @@
+type TreeNode {
+  id: ID! @rename(attribute: "uri")
+  path: String! @rename(attribute: "name_path")
+  taxonomicNameUsage: TaxonomicNameUsage!
+}

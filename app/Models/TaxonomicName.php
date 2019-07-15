@@ -61,7 +61,7 @@ namespace App\Models;
  * @property Tag[] $tags
  * @property TaxonomicName[] $children
  */
-class TaxonomicName extends BaseModel
+class TaxonomicName extends Name
 {
     /**
      * The table associated with the model.
@@ -216,13 +216,26 @@ class TaxonomicName extends BaseModel
     }
     
     /**
-     * 
-     * @return \App\Model\Instance
+     * Undocumented function
+     *
+     * @return \App\Models\Instance
      */
-    public function getPrimaryInstanceAttribute() 
+    public function getPrimaryInstanceAttribute()
     {
-        return $this->hasMany('\App\Models\Instance', 'name_id', 'id')
-                ->where('isPrimaryInstance', '=', true)->first();
+        return $primaryInstance = \App\Models\TaxonomicNameUsage
+                ::where('name_id', $this->id)->get()->filter(function($instance) {
+            return $instance->instance_type->primary_instance === true;
+        })->first();
+    }
+
+
+    /**
+     * 
+     * @return \App\Models\Reference
+     */
+    public function getNamePublishedInAttribute()
+    {
+        return $this->primaryInstance->reference;
     }
 
     /**
@@ -305,7 +318,7 @@ class TaxonomicName extends BaseModel
                 $authorship .= $this->basAuthor->abbrev . ') ';
             }
             if ($this->exAuthor) {
-                $authorship .= $this->exAuthor->abbrev . ' ex ';
+                $authorship .= $this->exAuthor->abbrev . '@ex ';
             }
             $authorship .= $this->author->abbrev;
             return $authorship;
@@ -332,6 +345,64 @@ class TaxonomicName extends BaseModel
     public function scopeOrderByFullName($query) 
     {
         return $query->orderBy('full_name', 'asc');
+    }
+
+    /**
+     *
+     * @return \App\Models\TaxonomicName|null
+     */
+    public function getBasionymAttribute()
+    {
+        if ($this->primary_instance->instance_type->name === 'comb. nov.') {
+            $citedBy = \App\Models\Instance::where('cited_by_id', $this->primaryInstance->id)->get();
+            if ($citedBy) {
+                $basionym = $citedBy->filter(function($instance) {
+                    return $instance->instance_type->name === 'basionym';
+                })->first();
+                if ($basionym) {
+                    return $basionym->taxonomicName;
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     * @return \App\Models\TaxonomicName|null
+     */
+    public function getReplacedSynonymAttribute()
+    {
+        if ($this->primary_instance->instance_type->name === 'comb. nov.') {
+            $citedBy = \App\Models\Instance::where('cited_by_id', $this->primaryInstance->id)->get();
+            if ($citedBy) {
+                $basionym = $citedBy->filter(function($instance) {
+                    return $instance->instance_type->name === 'replaced synonym';
+                })->first();
+                if ($basionym) {
+                    return $basionym->taxonomicName;
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getOtherCombinationsAttribute()
+    {
+        $cites = \App\Models\Instance
+                ::where('cites_id', $this->primary_instance->id)->get();
+        if ($cites) {
+            $combinations = $cites->filter(function($instance) {
+                return in_array($instance->instance_type->name, ['basionym', 'replaced synonym']);
+            });
+            if ($combinations) {
+                return $combinations->map(function($instance, $key) {
+                    return $instance->cited_by->taxonomic_name;
+                })->all();
+            }
+        }
     }
 
 }
