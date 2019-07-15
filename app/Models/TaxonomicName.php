@@ -318,7 +318,7 @@ class TaxonomicName extends Name
                 $authorship .= $this->basAuthor->abbrev . ') ';
             }
             if ($this->exAuthor) {
-                $authorship .= $this->exAuthor->abbrev . '@ex ';
+                $authorship .= $this->exAuthor->abbrev . ' ex ';
             }
             $authorship .= $this->author->abbrev;
             return $authorship;
