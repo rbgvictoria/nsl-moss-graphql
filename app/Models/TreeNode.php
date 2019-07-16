@@ -83,7 +83,7 @@ class TreeNode extends BaseModel
         return TaxonomicNameUsage
                 ::join('tree_element', 'instance.id', '=', 'tree_element.instance_id')
                 ->join('tree_version_element', 'tree_element.id', '=', 'tree_version_element.tree_element_id')
-                ->where('tree_version_element.taxon_id', 10112390)
+                ->where('tree_version_element.taxon_id', $this->taxon_id)
                 ->select('instance.*')
                 ->first();
     }
