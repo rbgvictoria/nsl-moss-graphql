@@ -183,7 +183,7 @@ class TaxonomicNameUsage extends Instance
     public function getHeterotypicSynonymsAttribute()
     {
         $synonymTypes = \App\Models\InstanceType::where('name', 'taxonomic synonym')
-                ->pluck('id');
+                ->pluck('id')->toArray();
         return TaxonomicNameUsage::where('cited_by_id', $this->id)
                 ->whereIn('instance_type_id', $synonymTypes)->get();
     }

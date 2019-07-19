@@ -11,6 +11,7 @@ type TaxonomicNameUsage {
     Accepted name usage for this Taxonomic Name Usage.
     """
     acceptedNameUsage: TaxonomicNameUsage
+    acceptedNameUsageFor: [TaxonomicNameUsage] @rename(attribute: "heterotypic_synonyms")
 
     parent: TaxonomicNameUsage
     children: [TaxonomicNameUsage]

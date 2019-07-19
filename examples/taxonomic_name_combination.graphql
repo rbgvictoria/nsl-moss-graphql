@@ -1,0 +1,29 @@
+query taxonomicNameCombination {
+  taxonomicName(id: "https://id.biodiversity.org.au/name/ausmoss/10003988") {
+    id
+    fullName
+    authorship
+    nomenclaturalCode
+    nomenclaturalStatus {
+      name
+    }
+    namePublishedIn {
+      id
+      title
+      volume
+      pages
+      year
+    }
+    publishedYear
+    basionym {
+      id
+      fullName
+      authorship
+    }
+    otherCombinations {
+      id
+      fullName
+      authorship
+    }
+  }
+}

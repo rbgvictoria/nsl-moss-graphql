@@ -1,0 +1,26 @@
+query taxonomicNameUsageWithClassification {
+  taxonomicNameUsage(id: "https://id.biodiversity.org.au/instance/ausmoss/10018273") {
+    ...tnuFragment
+    parent {
+      ...tnuFragment
+    }
+    classification {
+      ...tnuFragment
+    }
+  }
+}
+
+fragment tnuFragment on TaxonomicNameUsage {
+  id
+  taxonomicName {
+    id
+    fullName
+    authorship
+  }
+  accordingTo {
+    author {
+      name
+    }
+    year
+  }
+}

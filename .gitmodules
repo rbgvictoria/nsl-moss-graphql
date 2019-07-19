@@ -1,0 +1,6 @@
+[submodule "laradock-hortflora"]
+	path = laradock-hortflora
+	url = https://github.com/Laradock/laradock.git
+[submodule "laradock-nsl"]
+	path = laradock-nsl
+	url = https://github.com/Laradock/laradock.git
