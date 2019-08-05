@@ -10,7 +10,7 @@ return [
     ],
     
     // Route for the GraphQL endpoint
-    'endpoint' => 'graphql',
+    'endpoint' => env('APP_URL') . '/graphql',
 
     // Control if the playground is accessible at all
     // This allows you to disable it completely in production
