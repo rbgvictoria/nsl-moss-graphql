@@ -18,4 +18,8 @@ type TaxonomicNameUsage {
     classification: [TaxonomicNameUsage]
     branch: [TreeNode]
     distribution: [Distribution]
+
+    heterotypicSynonymInstances: [TaxonomicNameUsage]
+    nomenclaturalSynonymInstances: [TaxonomicNameUsage]
+    misapplicationInstances: [TaxonomicNameUsage]
 }
