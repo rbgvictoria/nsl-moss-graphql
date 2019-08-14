@@ -19,6 +19,7 @@ type TaxonomicNameUsage {
     branch: [TreeNode]
     distribution: [Distribution]
 
+    relationshipInstances: [TaxonomicNameUsages]
     heterotypicSynonymInstances: [TaxonomicNameUsage]
     nomenclaturalSynonymInstances: [TaxonomicNameUsage]
     misapplicationInstances: [TaxonomicNameUsage]
