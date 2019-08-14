@@ -34,5 +34,5 @@ type TaxonomicName {
   """
   taxonomicNameUsages: [TaxonomicNameUsage!]
   basionym: TaxonomicName
-  otherCombinations: [TaxonomicName]
+  basionymOf: [TaxonomicName] @rename(attribute: "other_combinations")
 }
