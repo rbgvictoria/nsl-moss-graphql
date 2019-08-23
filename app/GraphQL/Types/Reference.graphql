@@ -10,7 +10,8 @@ type Reference {
     Instances for a reference. For references only standalone instances are 
     provided.
     """
-    instances: [TaxonomicNameUsage!]! @paginate(type: "paginator")
+    taxonomicNameUsages: [TaxonomicNameUsage!]! @paginate(type: "paginator")
+    relationshipUsages: [RelationshipUsage!]! @paginate(type: "paginator")
     isbn: String
     issn: String
     pages: String

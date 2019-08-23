@@ -196,14 +196,34 @@ class TaxonomicName extends Name
     }
 
     /**
-     * Gets all taxonomicNameUsages for a TaxonomicName string
-     * (replaces hasMany relationship, which I couldn't get to work)
+     * Gets TaxonomicNameUsages for a TaxonomicName
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getTaxonomicNameUsagesAttribute()
     {
-        return \App\Models\TaxonomicNameUsage::where('name_id', '=', $this->id)->get();
+        return \App\Models\TaxonomicNameUsage::where('name_id', '=', $this->id)
+                ->whereHas('instance_type', function($query) {
+                    $query->orWhere(function($builder) {
+                        $builder->where('standalone', true)
+                                ->where('primary_instance', false);
+                    })->orWhere('name', 'taxonomic synonym');
+                })
+                ->get();
+    }
+
+    /**
+     * Gets RelationshipUsages for a TaxonomicName
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getRelationshipUsagesAttribute()
+    {
+        return \App\Models\RelationshipUsage::where('name_id', $this->id)
+                ->whereHas('instance_type', function($query) {
+                    $query->where('relationship', true);
+                })
+                ->get();
     }
 
     /**
@@ -404,5 +424,4 @@ class TaxonomicName extends Name
             }
         }
     }
-
 }

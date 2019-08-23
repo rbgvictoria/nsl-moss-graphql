@@ -171,20 +171,24 @@ class TaxonomicNameUsage extends Instance
         }
     }
 
+    /**
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     protected function getRelationshipInstancesAttribute()
     {
-        return TaxonomicNameUsage::where('cited_by_id', $this->id)->get();
+        return \App\Models\RelationshipUsage::where('cited_by_id', $this->id)->get();
     }
     
     /**
      * 
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getHeterotypicSynonymsAttribute()
+    public function getHeterotypicSynonymInstancesAttribute()
     {
         $synonymTypes = \App\Models\InstanceType::where('name', 'taxonomic synonym')
                 ->pluck('id')->toArray();
-        return TaxonomicNameUsage::where('cited_by_id', $this->id)
+        return \App\Models\RelationshipUsage::where('cited_by_id', $this->id)
                 ->whereIn('instance_type_id', $synonymTypes)->get();
     }
     
@@ -192,26 +196,21 @@ class TaxonomicNameUsage extends Instance
      * 
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getHomotypicSynonymsAttribute()
+    public function getHomotypicSynonymInstancesAttribute()
     {
-        $protonym = $this->protonym;
-        if ($this->instance_type->primary_instance) {
-            return \App\Models\TaxonomicNameUsage
-                ::where('protonym_id', $this->protonym->id)
-                ->get()
-                ->filter(function($tnu) {
-                    return $tnu->instance_type->primary_instance;
-                });
-        }
+        $synonymTypes = \App\Models\InstanceType::where('name', 'taxonomic synonym')
+                ->pluck('id')->toArray();
+        return \App\Models\RelationshipUsage::where('cited_by_id', $this->id)
+                ->whereIn('instance_type_id', $synonymTypes)->get();
     }
     
     /**
      * 
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getMisapplicationsAttribute()
+    public function getMisapplicationInstancessAttribute()
     {
-        return TaxonomicNameUsage::where('cited_by_id', $this->id)
+        return \App\Models\RelationshipUsage::where('cited_by_id', $this->id)
                 ->where('isMisapplied', true)->get();
     }
     
@@ -222,13 +221,24 @@ class TaxonomicNameUsage extends Instance
     public function getAcceptedNameUsageAttribute()
     {
         if ($this->instance_type->name === 'taxonomic synonym') {
-            return TaxonomicNameUsage::where('id', $this->cited_by_id)
+            return \App\Models\TaxonomicNameUsage::where('id', $this->cited_by_id)
                     ->first();
         }
         return null;
     }
     
-    
+    /**
+     * 
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getAcceptedNameUsageForAttribute()
+    {
+        $synonymTypes = \App\Models\InstanceType::where('name', 'taxonomic synonym')
+                ->pluck('id')->toArray();
+        return TaxonomicNameUsage::where('cited_by_id', $this->id)
+                ->whereIn('instance_type_id', $synonymTypes)->get();
+    }
+        
     public function getMisappliedToAttribute()
     {
         if ($this->isMisapplied) {
@@ -382,5 +392,6 @@ class TaxonomicNameUsage extends Instance
                 ->select('tree_element_distribution_entries.*')
                 ->get();
     }
+    
 
 }

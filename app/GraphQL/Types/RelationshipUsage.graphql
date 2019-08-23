@@ -1,0 +1,8 @@
+type RelationshipUsage {
+    id: ID! @rename(attribute: "uri")
+    usageType: UsageType @rename(attribute: "instance_type")
+    taxonomicName: TaxonomicName
+    accordingTo: Reference @rename(attribute: "reference")
+    citedNameUsage: TaxonomicNameUsage @rename(attribute: "cites")
+    citingNameUsage: TaxonomicNameUsage @rename(attribute: "cited_by")
+}

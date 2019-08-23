@@ -1,4 +1,4 @@
-type TaxonomicNameUsageType {
+type InstanceType {
     id: ID! @rename(attribute: "uri")
     citing: Boolean
     doubtful: Boolean
