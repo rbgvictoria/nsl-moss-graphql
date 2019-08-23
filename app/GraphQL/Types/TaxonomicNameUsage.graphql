@@ -6,12 +6,14 @@ type TaxonomicNameUsage {
     verbatimNameString: String
     taxonomicNameUsageLabel: String
 
+    usageType: UsageType @rename(attribute: "instance_type")
+
     notes: [TaxonomicNameUsageNote]
     """
     Accepted name usage for this Taxonomic Name Usage.
     """
     acceptedNameUsage: TaxonomicNameUsage
-    acceptedNameUsageFor: [TaxonomicNameUsage] @rename(attribute: "heterotypic_synonyms")
+    acceptedNameUsageFor: [TaxonomicNameUsage]
 
     parent: TaxonomicNameUsage
     children: [TaxonomicNameUsage]
@@ -19,8 +21,8 @@ type TaxonomicNameUsage {
     branch: [TreeNode]
     distribution: [Distribution]
 
-    relationshipInstances: [TaxonomicNameUsages]
-    heterotypicSynonymInstances: [TaxonomicNameUsage]
-    nomenclaturalSynonymInstances: [TaxonomicNameUsage]
-    misapplicationInstances: [TaxonomicNameUsage]
+    relationshipUsages: [RelationshipUsage] @rename(attribute: "relationship_instances")
+    heterotypicSynonymUsages: [RelationshipUsage] @rename(attribute: "heterotypic_synonym_instances")
+    homotypicSynonymUsages: [RelationshipUsage] @rename(attribute: "homotypic_synonym_instances")
+    misapplicationUsages: [RelationshipUsage]  @rename(attribute: "misapplication_instances")
 }

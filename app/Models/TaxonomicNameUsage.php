@@ -177,7 +177,7 @@ class TaxonomicNameUsage extends Instance
      */
     protected function getRelationshipInstancesAttribute()
     {
-        return TaxonomicNameUsage::where('cited_by_id', $this->id)->get();
+        return \App\Models\RelationshipUsage::where('cited_by_id', $this->id)->get();
     }
     
     /**
@@ -188,7 +188,7 @@ class TaxonomicNameUsage extends Instance
     {
         $synonymTypes = \App\Models\InstanceType::where('name', 'taxonomic synonym')
                 ->pluck('id')->toArray();
-        return TaxonomicNameUsage::where('cited_by_id', $this->id)
+        return \App\Models\RelationshipUsage::where('cited_by_id', $this->id)
                 ->whereIn('instance_type_id', $synonymTypes)->get();
     }
     
@@ -200,7 +200,7 @@ class TaxonomicNameUsage extends Instance
     {
         $synonymTypes = \App\Models\InstanceType::where('name', 'taxonomic synonym')
                 ->pluck('id')->toArray();
-        return TaxonomicNameUsage::where('cited_by_id', $this->id)
+        return \App\Models\RelationshipUsage::where('cited_by_id', $this->id)
                 ->whereIn('instance_type_id', $synonymTypes)->get();
     }
     
@@ -210,7 +210,7 @@ class TaxonomicNameUsage extends Instance
      */
     public function getMisapplicationInstancessAttribute()
     {
-        return TaxonomicNameUsage::where('cited_by_id', $this->id)
+        return \App\Models\RelationshipUsage::where('cited_by_id', $this->id)
                 ->where('isMisapplied', true)->get();
     }
     
@@ -221,13 +221,24 @@ class TaxonomicNameUsage extends Instance
     public function getAcceptedNameUsageAttribute()
     {
         if ($this->instance_type->name === 'taxonomic synonym') {
-            return TaxonomicNameUsage::where('id', $this->cited_by_id)
+            return \App\Models\TaxonomicNameUsage::where('id', $this->cited_by_id)
                     ->first();
         }
         return null;
     }
     
-    
+    /**
+     * 
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getAcceptedNameUsageForAttribute()
+    {
+        $synonymTypes = \App\Models\InstanceType::where('name', 'taxonomic synonym')
+                ->pluck('id')->toArray();
+        return TaxonomicNameUsage::where('cited_by_id', $this->id)
+                ->whereIn('instance_type_id', $synonymTypes)->get();
+    }
+        
     public function getMisappliedToAttribute()
     {
         if ($this->isMisapplied) {

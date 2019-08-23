@@ -29,10 +29,9 @@ type TaxonomicName {
   """
   nomenclaturalStatus: NameStatus! @rename(attribute: "name_status")
 
-  """
-  List of all Taxonomic Name Usages with this Taxonomic Name
-  """
   taxonomicNameUsages: [TaxonomicNameUsage!]
+  relationshipUsages: [RelationshipUsage]
+
   basionym: TaxonomicName
   basionymOf: [TaxonomicName] @rename(attribute: "other_combinations")
 }

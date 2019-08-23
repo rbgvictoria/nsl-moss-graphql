@@ -139,6 +139,35 @@ class Reference extends BaseModel
         return $this->hasMany('App\Models\Instance')->where('isStandalone', true);
     }
 
+    /**
+     * TaxonomicNameUsages in this Reference
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getTaxonomicNameUsagesAttribute()
+    {
+        return \App\Models\TaxonomicNameUsage::where('reference_id', $this->id)
+                ->whereHas('instance_type', function($query) {
+                    $query->orWhere(function($query) {
+                        $query->where('standalone', true)
+                                ->where('primary_instance', false);
+                    })->orWhere('name', 'taxonomic synonym');
+                })->get();
+    }
+
+    /**
+     * RelationshipUsages in this Reference
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getRelationshipUsagesAttribute()
+    {
+        return \App\Models\RelationshipNameUsage::where('reference_id', $this->id)
+                ->whereHas('instance_type', function($query) {
+                    $query->where('relationship', true);
+                })->get();
+    }
+
     public function getShortRefAttribute() {
         return $this->author->name . ' ' . $this->year;
     }
