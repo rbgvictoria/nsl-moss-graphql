@@ -78,12 +78,6 @@
             "title": "parentNameUsage",
             "type": "string",
             "format": "uri"
-          },
-          {
-            "name": "http://rs.tdwg.org/dwc/terms/occurrenceStatus",
-            "title": "dwc:occurrenceStatus",
-            "type": "string",
-            "format": "default"
           }
         ],
         "primaryKey": "id",
@@ -339,6 +333,91 @@
             "fields": "http://rs.tdwg.or/tnu/terms/accordingTo",
             "reference": {
               "resource": "bibliographic-resources",
+              "fields": "id"
+            }
+          }
+        ],
+        "missingValues": [
+          ""
+        ]
+      }
+    },
+    {
+      "profile": "tabular-data-resource",
+      "name": "distribution",
+      "path": "data/distribution.csv",
+      "schema": {
+        "fields": [
+          {
+            "name": "id",
+            "title": "id",
+            "type": "string",
+            "format": "uri",
+            "constraints": {
+              "required": true
+            }
+          },
+          {
+            "name": "http://rs.tdwg.org/dwc/terms/taxonID",
+            "title": "taxonId",
+            "type": "string",
+            "format": "uri",
+            "constraints": {
+              "required": true
+            }
+          },
+          {
+            "name": "http://rs.tdwg.org/dwc/terms/locationID",
+            "title": "locationId",
+            "type": "string",
+            "constraints": {
+              "required": true
+            },
+            "format": "default"
+          },
+          {
+            "name": "http://rs.tdwg.or/tnu/terms/locality",
+            "title": "locality",
+            "type": "string",
+            "format": "default",
+            "constraints": {
+              "required": true
+            }
+          },
+          {
+            "name": "http://rs.tdwg.or/tnu/terms/countryCode",
+            "title": "countryCode",
+            "type": "string",
+            "format": "default",
+            "constraints": {
+              "required": true
+            }
+          },
+          {
+            "name": "http://rs.tdwg.or/tnu/terms/occurrence_status",
+            "title": "occurrenceStatus",
+            "type": "string",
+            "format": "default",
+            "constraints": {
+              "required": true
+            }
+          },
+          {
+            "name": "http://rs.tdwg.or/tnu/terms/establishmentMeans",
+            "title": "establishmentMeans",
+            "type": "string",
+            "format": "default",
+            "constraints": {
+              "required": true
+            }
+          }
+        ],
+        "primaryKey": "id",
+        "foreignKeys": [
+          {
+            "fields": "http://rs.tdwg.org/dwc/terms/taxonID",
+            "reference": {
+              "resource": "taxonomic-name-usages",
               "fields": "id"
             }
           }

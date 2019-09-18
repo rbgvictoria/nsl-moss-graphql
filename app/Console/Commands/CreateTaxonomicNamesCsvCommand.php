@@ -66,7 +66,7 @@ class CreateTaxonomicNamesCsvCommand extends Command
             $csv->insertOne(array_values((array) $row));
         }
 
-        Storage::put('tnu-datapackage/taxonomic_names.csv', $csv->getContent());
+        Storage::put('tnu-datapackage/data/taxonomic_names.csv', $csv->getContent());
         $this->info('taxonomic_names_csv has been created.');
     }
 }

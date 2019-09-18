@@ -57,7 +57,7 @@ class CreateTaxonRelationshipAssertionsCsvCommand extends Command
         ];
         $csv->insertOne($row);
 
-        Storage::put('tnu-datapackage/taxon_relationship_assertions.csv', $csv->getContent());
+        Storage::put('tnu-datapackage/data/taxon_relationship_assertions.csv', $csv->getContent());
         $this->info('taxon_relationship_assertions.csv has been created.');
     }
 }

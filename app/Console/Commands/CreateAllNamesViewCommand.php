@@ -61,7 +61,7 @@ SELECT n.id,
     WHEN 'Subgenus' THEN 'subgenus'
     WHEN 'Sectio' THEN 'section'
     WHEN 'Species' THEN 'species'
-    WHEN 'Subspecies' THEN 'superorder'
+    WHEN 'Subspecies' THEN 'subspecies'
     WHEN 'Varietas' THEN 'variety'
     WHEN 'Forma' THEN 'form'
     END as rank,

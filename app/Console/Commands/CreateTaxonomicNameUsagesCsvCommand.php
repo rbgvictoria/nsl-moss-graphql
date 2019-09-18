@@ -46,8 +46,7 @@ class CreateTaxonomicNameUsagesCsvCommand extends Command
                     DB::raw("'https://id.biodiversity.org.au/reference/ausmoss/' || according_to as according_to"),
                     'taxonomic_status',
                     DB::raw("'https://id.biodiversity.org.au/instance/ausmoss/' || accepted_name_usage as accepted_name_usage"),
-                    DB::raw("'https://id.biodiversity.org.au/instance/ausmoss/' || parent_name_usage as parent_name_usage"),
-                    'occurrence_status'
+                    DB::raw("'https://id.biodiversity.org.au/instance/ausmoss/' || parent_name_usage as parent_name_usage")
                 )->get();
 
         $csv = Writer::createFromString('');
@@ -62,6 +61,6 @@ class CreateTaxonomicNameUsagesCsvCommand extends Command
             $csv->insertOne(array_values((array) $row));
         }
 
-        Storage::put('tnu-datapackage/taxonomic_name_usages.csv', $csv->getContent(), 'public');
+        Storage::put('tnu-datapackage/data/taxonomic_name_usages.csv', $csv->getContent(), 'public');
     }
 }

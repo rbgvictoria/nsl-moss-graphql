@@ -64,7 +64,7 @@ class CreateBibliographicResourcesCsvCommand extends Command
             $csv->insertOne(array_values((array) $row));
         }
 
-        Storage::put('tnu-datapackage/bibliographic_resources.csv', $csv->getContent(), 'public');
+        Storage::put('tnu-datapackage/data/bibliographic_resources.csv', $csv->getContent(), 'public');
         $this->info('bibliographic_resources.csv has been created');
     }
 }
