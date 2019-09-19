@@ -54,6 +54,9 @@ class CreateDatapackageCommand extends Command
         $this->info('Write bibliographic_resources.csv');
         Artisan::call('tnu:create-csv:bibliographic-resources');
         
+        $this->info('Write agents.csv');
+        Artisan::call('tnu:create-csv:agents');
+        
         $this->info('Copy datapackage.json');
         copy(resource_path() . '/datapackage/datapackage.json', storage_path('App') . '/tnu-datapackage/datapackage.json');
 

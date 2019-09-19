@@ -443,16 +443,16 @@
             }
           },
           {
-            "name": "resourceType",
-            "title": "resourceType",
+            "name": "http://purl.org/dc/terms/type",
+            "title": "type",
             "type": "string",
-            "format": "default"
+            "format": "uri"
           },
           {
-            "name": "creator",
+            "name": "http://purl.org/dc/terms/creator",
             "title": "creator",
             "type": "string",
-            "format": "default"
+            "format": "uri"
           },
           {
             "name": "publictionYear",
@@ -467,23 +467,26 @@
             "format": "default"
           },
           {
-            "name": "parent",
-            "title": "parent",
+            "name": "http://purl.org/dc/terms/isPartOf",
+            "title": "isPartOf",
             "type": "string",
             "format": "uri"
           },
           {
-            "name": "volume",
+            "name": "http://purl.org/ontology/bibo/volume",
+            "title": "volume",
             "type": "string",
             "format": "default"
           },
           {
-            "name": "pages",
+            "name": "http://purl.org/ontology/bibo/pages",
+            "title": "pages",
             "type": "string",
             "format": "default"
           },
           {
-            "name": "publisher",
+            "name": "http://purl.org/dc/elements/1.1/publisher",
+            "title": "publisher",
             "type": "string",
             "format": "default"
           }
@@ -491,7 +494,15 @@
         "primaryKey": "id",
         "foreignKeys": [
           {
-            "fields": "parent",
+            "fields": "http://purl.org/dc/terms/creator",
+            "reference": {
+              "resource": "agents",
+              "fields": "id"
+            }
+      
+          },
+          {
+            "fields": "http://purl.org/dc/terms/isPartOf",
             "reference": {
               "resource": "",
               "fields": "id"
@@ -499,6 +510,37 @@
       
           }
         ],
+        "missingValues": [
+          ""
+        ]
+      }
+    },
+    {
+      "profile": "tabular-data-resource",
+      "name": "agents",
+      "path": "data/agents.csv",
+      "schema": {
+        "fields": [
+          {
+            "name": "id",
+            "title": "id",
+            "type": "string",
+            "format": "uri",
+            "constraints": {
+              "required": true
+            }
+          },
+          {
+            "name": "http://xmlns.com/foaf/0.1/name",
+            "title": "name",
+            "type": "string",
+            "format": "default",
+            "constraints": {
+              "required": true
+            }
+          }
+        ],
+        "primaryKey": "id",
         "missingValues": [
           ""
         ]

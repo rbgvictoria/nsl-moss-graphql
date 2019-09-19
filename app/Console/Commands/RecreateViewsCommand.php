@@ -54,6 +54,9 @@ class RecreateViewsCommand extends Command
         $this->info('Create tnu_bibliographic_resources view...');
         Artisan::call('tnu:create:bibliographic-resources-view');
 
+        $this->info('Create tnu_distribution view...');
+        Artisan::call('tnu:create:distribution-view');
+
         $this->info('Done.');
     }
 }

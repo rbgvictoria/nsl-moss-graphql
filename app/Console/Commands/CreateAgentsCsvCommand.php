@@ -7,21 +7,21 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use League\Csv\Writer;
 
-class CreateBibliographicResourcesCsvCommand extends Command
+class CreateAgentsCsvCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'tnu:create-csv:bibliographic-resources';
+    protected $signature = 'tnu:create-csv:agents';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create bibliographic resources CSV file.';
+    protected $description = 'Command description';
 
     /**
      * Create a new command instance.
@@ -40,18 +40,12 @@ class CreateBibliographicResourcesCsvCommand extends Command
      */
     public function handle()
     {
-        $data = DB::table('tnu_bibliographic_resources')->select(
-            DB::raw("'https://id.biodiversity.org.au/reference/ausmoss/' || id as id"),
-            'type',
-            DB::raw("'https://id.biodiversity.org.au/author/ausmoss/' || agent_id as creator"),
-            'publication_year as created',
-            'title',
-            DB::raw("'https://id.biodiversity.org.au/reference/ausmoss/' || parent as is_part_of"),
-            'volume',
-            'pages',
-            'publisher'
-        )->get();
-
+        $data = DB::table('tnu_bibliographic_resources')
+                ->whereNotNull('agent_id')
+                ->select(
+                    DB::raw("'https://id.biodiversity.org.au/author/ausmoss/'||agent_id as id"),
+                    'creator as name'
+                )->distinct()->get();
         $csv = Writer::createFromString('');
         $header = [];
         foreach (array_keys((array) $data->first()) as $value) {
@@ -64,7 +58,7 @@ class CreateBibliographicResourcesCsvCommand extends Command
             $csv->insertOne(array_values((array) $row));
         }
 
-        Storage::put('tnu-datapackage/data/bibliographic_resources.csv', $csv->getContent(), 'public');
-        $this->info('bibliographic_resources.csv has been created');
+        Storage::put('tnu-datapackage/data/agents.csv', $csv->getContent(), 'public');
+        $this->info('agents.csv has been created');
     }
 }

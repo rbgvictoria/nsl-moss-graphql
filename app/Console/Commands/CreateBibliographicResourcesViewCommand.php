@@ -40,9 +40,16 @@ class CreateBibliographicResourcesViewCommand extends Command
     {
         $sql = <<<EOT
 CREATE OR REPLACE VIEW tnu_bibliographic_resources AS
-SELECT 
-    r.id,
-    rt.name as reference_type,
+SELECT r.id,
+    CASE rt.name 
+      WHEN 'Book' THEN 'https://schema.org/Book'
+      WHEN 'Paper' THEN 'https://schema.org/Article'
+      WHEN 'Section' THEN 'https://schema.org/Chapter'
+      WHEN 'Journal' THEN 'https://schema.org/Periodical'
+      WHEN 'Database' THEN 'https://graphql.org/WebSite'
+      WHEN 'Unknown' THEN 'http://purl.org/dc/terms/BibliographicResource'
+    END AS type,
+    a.id as agent_id,
     a.name as creator, 
     coalesce(r.year, substring(r.iso_publication_date from 1 for 4)::integer) as publication_year, 
     r.title, 
