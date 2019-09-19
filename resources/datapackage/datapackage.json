@@ -21,6 +21,12 @@
       "email": "Niels.Klazenga@rbg.vic.gov.au"
     }
   ],
+  "sources": [
+    {
+      "title": "National Species Lists",
+      "path": "https://biodiversity.org.au"
+    }
+  ],
   "resources": [
     {
       "profile": "tabular-data-resource",
