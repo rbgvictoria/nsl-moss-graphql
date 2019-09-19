@@ -65,6 +65,7 @@ SELECT n.id,
     WHEN 'Varietas' THEN 'variety'
     WHEN 'Forma' THEN 'form'
     END as rank,
+    CASE WHEN ns.nom_inval=false THEN 'ICN' ELSE null END as nomenclatural_code,
     CASE ns.name
     WHEN 'nom. inval.' THEN 'invalid'
     WHEN 'isonym' THEN 'invalid'

@@ -49,6 +49,7 @@ class CreateTaxonomicNamesCsvCommand extends Command
             'micro_reference',
             'publication_year',
             'rank',
+            DB::raw("'http://rs.gbif.org/vocabulary/gbif/nomenclatural_code/' || nomenclatural_code as nomenclatural_code"),
             'nomenclatural_status',
             DB::raw("'https://id.biodiversity.org.au/name/ausmoss/' || basionym as basionym"),
             DB::raw("'https://id.biodiversity.org.au/name/ausmoss/' || replaced_synonym as replaced_name")

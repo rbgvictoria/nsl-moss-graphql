@@ -196,6 +196,22 @@
             "format": "default"
           },
           {
+            "name": "http://rs.tdwg.or/tnu/terms/nomenclaturalCode",
+            "title": "nomenclaturalCode",
+            "type": "string",
+            "constraints": {
+              "enum": [
+                "http://rs.gbif.org/vocabulary/gbif/nomenclatural_code/ICN",
+                "http://rs.gbif.org/vocabulary/gbif/nomenclatural_code/ICZN",
+                "http://rs.gbif.org/vocabulary/gbif/nomenclatural_code/ICVCN",
+                "http://rs.gbif.org/vocabulary/gbif/nomenclatural_code/ICNB",
+                "http://rs.gbif.org/vocabulary/gbif/nomenclatural_code/ICNCP",
+                "http://rs.gbif.org/vocabulary/gbif/nomenclatural_code/BioCode"
+              ]
+            },
+            "format": "uri"
+          },
+          {
             "name": "http://rs.tdwg.or/tnu/terms/nomenclaturalStatus",
             "title": "nomenclaturalStatus",
             "type": "string",
