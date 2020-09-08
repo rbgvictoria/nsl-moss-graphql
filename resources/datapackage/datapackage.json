@@ -68,7 +68,8 @@
             "constraints": {
               "enum": [
                 "accepted",
-                "synonym"
+                "synonym",
+                "uncertain"
               ]
             },
             "format": "default"
@@ -421,7 +422,12 @@
             "type": "string",
             "format": "default",
             "constraints": {
-              "required": true
+              "required": true,
+              "enum": [
+                "present",
+                "doubtful",
+                "excluded"
+              ]
             }
           },
           {

@@ -40,7 +40,8 @@ class CreateDistributionViewCommand extends Command
     {
         $sql = <<<EOT
 CREATE OR REPLACE VIEW tnu_distribution AS
-SELECT te.id::text, t.id as taxon_id, 'ISO:AU' as locality_id, 'Australia' as locality, 'AU' as country_code, t.occurrence_status, null as establishment_means
+SELECT te.id::text, t.id as taxon_id, 'ISO:AU' as locality_id, 'Australia' as locality, 
+  'AU' as country_code, t.occurrence_status, null::character varying as establishment_means
 FROM tnu_taxonomic_name_usages t
 JOIN tnu_taxonomic_names n ON t.taxonomic_name=n.id
 JOIN (
@@ -58,6 +59,13 @@ JOIN (
     )
 ) as te ON t.id=te.instance_id
 WHERE n.rank IN ('species', 'subspecies', 'variety', 'form') AND t.taxonomic_status='accepted'
+UNION
+SELECT i.id||'_1', i.id as taxon_id, 'ISO:AU' as locality_id, 'Australia' as locality, 'AU' as country_code, 
+  CASE it.name WHEN 'excluded name' THEN 'excluded' WHEN  'occurrence doubtful' THEN 'doubtful' END AS occurrence_status, 
+  null as establishment_means
+FROM instance i
+JOIN instance_type it ON i.instance_type_id=it.id
+WHERE it.name IN ('excluded name', 'occurrence doubtful')
 UNION
 SELECT 
     te.id||'_'||r.id as id, 

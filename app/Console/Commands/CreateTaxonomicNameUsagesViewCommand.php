@@ -106,6 +106,23 @@ WHERE tve.tree_version_id=(
 )
 AND sit.name='taxonomic synonym'
 
+UNION
+
+SELECT i.id, 
+  i.name_id as taxonomic_name, 
+  i.reference_id as according_to,
+  CASE WHEN it.name='status uncertain' THEN 'uncertain' ELSE 'accepted' END as taxonomic_status, 
+  null as accepted_name_usage, 
+  null as parent_name_usage,  
+  n.simple_name as  taxonomic_name_string,
+  null as accepted_name_usage_string,
+  null as parent_name_usage_string,
+  CASE WHEN it.name='excluded name' THEN 'excluded' WHEN it.name='occurrence doubtful' THEN 'doubtful' ELSE null END as occurrence_status
+FROM instance i
+JOIN instance_type it ON i.instance_type_id=it.id
+JOIN name n ON i.name_id=n.id
+WHERE it.name IN ('status uncertain', 'excluded name', 'occurrence doubtful')
+
 ORDER BY taxonomic_name_string
 EOT;
         DB::statement($sql);

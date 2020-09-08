@@ -40,33 +40,19 @@ class CreateTaxonomicNamesViewCommand extends Command
     {
         $sql = <<<EOT
 CREATE OR REPLACE VIEW tnu_taxonomic_names AS
-SELECT tn.id,
-  tn.taxonomic_name_string, 
-  tn.authorship, 
-  tn.taxonomic_name_string_with_authorship, 
-  tn.name_published_in,
-  tn.micro_reference,
-  tn.publication_year,
-  tn.rank,
-  tn.nomenclatural_code,
-  tn.nomenclatural_status,
-  tn.basionym,
-  tn.replaced_synonym
-FROM tnu_taxonomic_name_usages tc
-JOIN all_names n ON tc.taxonomic_name=n.id
-JOIN all_names tn ON n.protonym=tn.protonym
-GROUP BY tn.id,
-  tn.taxonomic_name_string, 
-  tn.authorship, 
-  tn.taxonomic_name_string_with_authorship, 
-  tn.name_published_in,
-  tn.micro_reference,
-  tn.publication_year,
-  tn.rank,
-  tn.nomenclatural_code,
-  tn.nomenclatural_status,
-  tn.basionym,
-  tn.replaced_synonym
+SELECT id,
+  taxonomic_name_string, 
+  authorship, 
+  taxonomic_name_string_with_authorship, 
+  name_published_in,
+  micro_reference,
+  publication_year,
+  rank,
+  nomenclatural_code,
+  nomenclatural_status,
+  basionym,
+  replaced_synonym
+FROM all_names
 EOT;
         DB::statement($sql);
         $this->info('View public.tnu_taxonomic_names has been created.');
