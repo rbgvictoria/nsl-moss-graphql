@@ -1,0 +1,51 @@
+{
+  taxonomicNameUsages(count: 20, filter: { name: "Octoblepharum" }) {
+    data {
+      id
+      taxonomicName {
+        ...taxonomicNameFragment
+      }
+      accordingTo {
+        ...referenceFragment
+      }
+      acceptedNameUsage {
+        ...taxonomicNameUsageFragment
+      }
+    }
+  }
+}
+
+fragment referenceFragment on Reference {
+  author {
+    name
+  }
+  year
+  title
+  refType {
+    name
+  }
+}
+
+fragment taxonomicNameFragment on TaxonomicName {
+  id
+  fullName
+  authorship
+	basionym {
+    id
+    fullName
+    authorship
+    namePublishedIn {
+      ...referenceFragment
+    }
+  }
+}
+
+fragment taxonomicNameUsageFragment on TaxonomicNameUsage {
+  id
+  taxonomicName {
+    ...taxonomicNameFragment
+  }
+  accordingTo {
+    ...referenceFragment
+  }
+}

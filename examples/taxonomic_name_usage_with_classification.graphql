@@ -1,5 +1,5 @@
 query taxonomicNameUsageWithClassification {
-  taxonomicNameUsage(id: "https://id.biodiversity.org.au/instance/ausmoss/10018273") {
+  taxonomicNameUsage(id: "https://id.biodiversity.org.au/instance/ausmoss/10019032") {
     ...tnuFragment
     parent {
       ...tnuFragment
@@ -22,5 +22,9 @@ fragment tnuFragment on TaxonomicNameUsage {
       name
     }
     year
+    title
+    refType {
+      name
+    }
   }
 }
