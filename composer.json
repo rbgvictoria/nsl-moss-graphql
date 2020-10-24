@@ -15,7 +15,7 @@
         "guzzlehttp/guzzle": "^6.3",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
-        "league/csv": "^9.3",
+        "league/csv": "^9.6",
         "mll-lab/laravel-graphql-playground": "^0.3.3",
         "nuwave/lighthouse": "^3.7",
         "sofa/eloquence": "^5.6"
