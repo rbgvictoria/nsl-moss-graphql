@@ -11,4 +11,5 @@ npm-debug.log
 yarn-error.log
 /nbproject
 /public/doc
+composer.lock
 
