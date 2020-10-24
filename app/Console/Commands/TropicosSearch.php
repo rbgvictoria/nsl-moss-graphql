@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Tropicos\TropicosSearch as Search;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-use function GuzzleHttp\json_encode;
 
 class TropicosSearch extends Command
 {
@@ -45,7 +44,11 @@ class TropicosSearch extends Command
         $names = DB::table('name')
                 ->join('name_rank', 'name.name_rank_id', '=', 'name_rank.id')
                 ->leftJoin('name as parent', 'name.parent_id', '=', 'parent.id')
-                ->select('name.id', 'name.simple_name', 'name.full_name', 'parent.simple_name as parent_name', 'name_rank.sort_order')
+                ->leftJoin('tropicos.ausmoss_names_tropicos_names as tn', 'name.id', '=', 'tn.ausmoss_name_id')
+                ->whereNull('tn.id')
+                ->select('name.id', 'name.simple_name', 'name.full_name', 
+                        'parent.simple_name as parent_name', 
+                        'name_rank.sort_order')
                 ->orderBy('full_name')
                 ->get();
 
